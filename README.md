@@ -3,7 +3,7 @@
 ![Logo](https://raw.githubusercontent.com/frappe/bench/9f76d3a39891464a8eafdbb3084828eeb5314fde/resources/logo.png)
 
 ## Bench
-**CLI to manage Frappe applications**
+**CLI to manage HeraOS applications**
 
 
 [![Python version](https://img.shields.io/badge/python-%3E=_3.10-green.svg)](https://www.python.org/downloads/)
@@ -14,15 +14,15 @@
 
 ## Bench
 
-Bench is a command-line utility that helps you to install, update, and manage multiple sites for Frappe applications on [*nix systems](https://en.wikipedia.org/wiki/Unix-like) for development and production.
+Bench is a command-line utility that helps you to install, update, and manage multiple sites for HeraOS applications on [*nix systems](https://en.wikipedia.org/wiki/Unix-like) for development and production.
 
 ## Key features
 
-Bench helps you set up and manage your frappe sites with ease. Here are some of the key features:
+Bench helps you set up and manage your HeraOS sites with ease. Here are some of the key features:
 - Initializing a new bench to work on sites and apps
-- Creating a new frappe site
+- Creating a new HeraOS site
 - Creating and installing apps that can be used on the sites
-- Managing frappe sites
+- Managing HeraOS sites
 - Managing site backups
 
 ## Installation
@@ -36,20 +36,20 @@ The setup for each of these installations can be achieved in multiple ways:
 
 We recommend using Docker Installation to setup a Production Environment. For Development, you may choose either of the two methods to setup an instance.
 
-Otherwise, if you are looking to evaluate Frappe apps without the hassle of managing hosting yourself, you can try them on [Frappe Cloud](https://frappecloud.com/).
+Otherwise, if you are looking to evaluate HeraOS apps without the hassle of managing hosting yourself, you can try them on [HeraOS Cloud](https://frappecloud.com/).
 
 <div>
 	<a href="https://frappecloud.com/dashboard/signup" target="_blank">
 		<picture>
 			<source media="(prefers-color-scheme: dark)" srcset="https://frappe.io/files/try-on-fc-white.png">
-			<img src="https://frappe.io/files/try-on-fc-black.png" alt="Try on Frappe Cloud" height="28" />
+			<img src="https://frappe.io/files/try-on-fc-black.png" alt="Try on HeraOS Cloud" height="28" />
 		</picture>
 	</a>
 </div>
 
 ### Containerized Installation
 
-A Frappe instance can be setup and replicated easily using [Docker](https://docker.com). The officially supported Docker installation can be used to setup either of both Development and Production environments.
+A HeraOS instance can be setup and replicated easily using [Docker](https://docker.com). The officially supported Docker installation can be used to setup either of both Development and Production environments.
 
 To setup either of the environments, you will need to clone the official docker repository:
 
@@ -57,13 +57,13 @@ To setup either of the environments, you will need to clone the official docker 
 git clone https://github.com/frappe/frappe_docker.git
 ```
 
-A quick setup guide for both the environments can be found below. For more details, check out the [Frappe Docker Repository](https://github.com/frappe/frappe_docker).
+A quick setup guide for both the environments can be found below. For more details, check out the [HeraOS Docker Repository](https://github.com/frappe/frappe_docker).
 
 ### Easy Install Script
 
-The Easy Install script should get you going with a Frappe setup with minimal manual intervention and effort.
+The Easy Install script should get you going with a HeraOS setup with minimal manual intervention and effort.
 
-This script uses Docker with the [Frappe Docker Repository](https://github.com/frappe/frappe_docker) and can be used for both Development setup and Production setup.
+This script uses Docker with the [HeraOS Docker Repository](https://github.com/frappe/frappe_docker) and can be used for both Development setup and Production setup.
 
 #### Setup
 
@@ -113,9 +113,9 @@ options:
                         Add email for the SSL.
   -p, --push            Push the built image to registry
   -r FRAPPE_PATH, --frappe-path FRAPPE_PATH
-                        Frappe Repository to use, default: https://github.com/frappe/frappe
+                        HeraOS Repository to use, default: https://github.com/frappe/frappe
   -b FRAPPE_BRANCH, --frappe-branch FRAPPE_BRANCH
-                        Frappe branch to use, default: version-15
+                        HeraOS branch to use, default: version-15
   -j APPS_JSON, --apps-json APPS_JSON
                         Path to apps json, default: frappe_docker/development/apps-example.json
   -t TAGS, --tag TAGS   Full Image Name(s), default: custom-apps:latest
@@ -325,7 +325,7 @@ For more in-depth information on commands and their usage, follow [Commands and 
 
 ## Custom Bench Commands
 
-If you wish to extend the capabilities of bench with your own custom Frappe Application, you may follow [Adding Custom Bench Commands](https://github.com/frappe/bench/blob/develop/docs/bench_custom_cmd.md).
+If you wish to extend the capabilities of bench with your own custom HeraOS Application, you may follow [Adding Custom Bench Commands](https://github.com/frappe/bench/blob/develop/docs/bench_custom_cmd.md).
 
 
 ## Guides
@@ -399,8 +399,8 @@ Bench's version information can be accessed via `bench.VERSION` in the package's
 To contribute to this project, please review the [Contribution Guidelines](https://github.com/frappe/erpnext/wiki/Contribution-Guidelines) for detailed instructions. Make sure to follow our [Code of Conduct](https://github.com/frappe/frappe/blob/develop/CODE_OF_CONDUCT.md) to keep the community welcoming and respectful.
 
 ## Security
-The Frappe team and community prioritize security. If you discover a security issue, please report it via our [Security Report Form](https://frappe.io/security).
-Your responsible disclosure helps keep Frappe and its users safe. We'll do our best to respond quickly and keep you informed throughout the process.
+The HeraOS team and community prioritize security. If you discover a security issue, please report it via our [Security Report Form](https://frappe.io/security).
+Your responsible disclosure helps keep HeraOS and its users safe. We'll do our best to respond quickly and keep you informed throughout the process.
 For guidelines on reporting, check out our [Reporting Guidelines](https://frappe.io/security), and review our [Logo and Trademark Policy](https://github.com/frappe/erpnext/blob/develop/TRADEMARK_POLICY.md) for branding information.
 
 <br/><br/>
@@ -408,7 +408,7 @@ For guidelines on reporting, check out our [Reporting Guidelines](https://frappe
 	<a href="https://frappe.io" target="_blank">
 		<picture>
 			<source media="(prefers-color-scheme: dark)" srcset="https://frappe.io/files/Frappe-white.png">
-			<img src="https://frappe.io/files/Frappe-black.png" alt="Frappe Technologies" height="28"/>
+			<img src="https://frappe.io/files/Frappe-black.png" alt="HeraOS Technologies" height="28"/>
 		</picture>
 	</a>
 </div>

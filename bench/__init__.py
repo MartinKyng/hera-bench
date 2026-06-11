@@ -1,5 +1,5 @@
-VERSION = "5.0.0-dev"
-PROJECT_NAME = "frappe-bench"
+VERSION = "0.0.1-dev"
+PROJECT_NAME = "heraos-bench"
 FRAPPE_VERSION = None
 current_path = None
 updated_path = None

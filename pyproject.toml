@@ -1,11 +1,11 @@
 [project]
 name = "frappe-bench"
-description = "CLI to manage Multi-tenant deployments for Frappe apps"
+description = "CLI to manage Multi-tenant deployments for HeraOS apps"
 readme = "README.md"
 license = "GPL-3.0-only"
 requires-python = ">=3.10"
 authors = [
-    { name = "Frappe Technologies Pvt Ltd", email = "developers@frappe.io" },
+    { name = "Kyng Royal Technologies", email = "Kyngtechnologies@gmail.com" },
 ]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
@@ -35,7 +35,7 @@ dynamic = [
 ]
 
 [project.scripts]
-bench = "bench.cli:cli"
+heraos = "bench.cli:cli"
 
 [project.urls]
 Changelog = "https://github.com/frappe/bench/releases"
