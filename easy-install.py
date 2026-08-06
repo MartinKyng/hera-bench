@@ -43,22 +43,22 @@ def cprint(*args, level: int = 1):
         print(CYLW, message, reset)
 
 
-def clone_frappe_docker_repo() -> None:
+def clone_heraos_docker_repo() -> None:
     try:
         urllib.request.urlretrieve(
-            "https://github.com/frappe/frappe_docker/archive/refs/heads/main.zip",
-            "frappe_docker.zip",
+            "https://github.com/martinkyng/heraos_docker/archive/refs/heads/main.zip",
+            "heraos_docker.zip",
         )
-        logging.info("Downloaded frappe_docker zip file from GitHub")
-        unpack_archive("frappe_docker.zip", ".")
-        # Unzipping the frappe_docker.zip creates a folder "frappe_docker-main"
-        move("frappe_docker-main", "frappe_docker")
-        logging.info("Unzipped and Renamed frappe_docker")
-        os.remove("frappe_docker.zip")
+        logging.info("Downloaded heraos_docker zip file from GitHub")
+        unpack_archive("heraos_docker.zip", ".")
+        # Unzipping the heraos_docker.zip creates a folder "heraos_docker-main"
+        move("heraos_docker-main", "heraos_docker")
+        logging.info("Unzipped and Renamed heraos_docker")
+        os.remove("heraos_docker.zip")
         logging.info("Removed the downloaded zip file")
     except Exception as e:
         logging.error("Download and unzip failed", exc_info=True)
-        cprint("\nCloning frappe_docker Failed\n\n", "[ERROR]: ", e, level=1)
+        cprint("\nCloning heraos_docker Failed\n\n", "[ERROR]: ", e, level=1)
 
 
 def get_from_env(dir, file) -> Dict:
@@ -73,7 +73,7 @@ def get_from_env(dir, file) -> Dict:
 
 
 def write_to_env(
-    frappe_docker_dir: str,
+    heraos_docker_dir: str,
     out_file: str,
     sites: List[str],
     db_pass: str,
@@ -86,7 +86,7 @@ def write_to_env(
     custom_tag: str = None,
 ) -> None:
     quoted_sites = ",".join([f"`{site}`" for site in sites]).strip(",")
-    example_env = get_from_env(frappe_docker_dir, "example.env")
+    example_env = get_from_env(heraos_docker_dir, "example.env")
     erpnext_version = erpnext_version or example_env["ERPNEXT_VERSION"]
     env_file_lines = [
         # defaults to latest version of ERPNext
@@ -128,12 +128,12 @@ def generate_pass(length: int = 12) -> str:
     return secrets.token_hex(math.ceil(length / 2))[:length]
 
 
-def get_frappe_docker_path():
-    return os.path.join(os.getcwd(), "frappe_docker")
+def get_heraos_docker_path():
+    return os.path.join(os.getcwd(), "heraos_docker")
 
 
 def check_repo_exists() -> bool:
-    return os.path.exists(get_frappe_docker_path())
+    return os.path.exists(get_heraos_docker_path())
 
 
 def start_prod(
@@ -147,7 +147,7 @@ def start_prod(
     http_port: str = None,
 ):
     if not check_repo_exists():
-        clone_frappe_docker_repo()
+        clone_heraos_docker_repo()
     install_container_runtime()
 
     compose_file_name = os.path.join(
@@ -162,7 +162,7 @@ def start_prod(
         env_file_name,
     )
 
-    frappe_docker_dir = get_frappe_docker_path()
+    heraos_docker_dir = get_heraos_docker_path()
 
     cprint(
         f"\nPlease refer to {env_file_path} to know which keys to set\n\n",
@@ -183,7 +183,7 @@ def start_prod(
             admin_pass = generate_pass()
             db_pass = generate_pass(9)
             write_to_env(
-                frappe_docker_dir=frappe_docker_dir,
+                heraos_docker_dir=heraos_docker_dir,
                 out_file=env_file_path,
                 sites=sites,
                 db_pass=db_pass,
@@ -215,7 +215,7 @@ def start_prod(
 
             version = env.get("ERPNEXT_VERSION", version)
             write_to_env(
-                frappe_docker_dir=frappe_docker_dir,
+                heraos_docker_dir=heraos_docker_dir,
                 out_file=env_file_path,
                 sites=sites,
                 db_pass=db_pass,
@@ -255,7 +255,7 @@ def start_prod(
 
             subprocess.run(
                 command,
-                cwd=frappe_docker_dir,
+                cwd=heraos_docker_dir,
                 stdout=f,
                 check=True,
             )
@@ -357,7 +357,7 @@ def update_prod(
 
 def setup_dev_instance(project: str):
     if not check_repo_exists():
-        clone_frappe_docker_repo()
+        clone_heraos_docker_repo()
     install_container_runtime()
 
     try:
@@ -373,11 +373,11 @@ def setup_dev_instance(project: str):
         ]
         subprocess.run(
             command,
-            cwd=get_frappe_docker_path(),
+            cwd=get_heraos_docker_path(),
             check=True,
         )
         cprint(
-            "Please go through the Development Documentation: https://github.com/frappe/frappe_docker/tree/main/docs/development.md to fully complete the setup.",
+            "Please go through the Development Documentation: https://github.com/martinkyng/heraos_docker/tree/main/docs/development.md to fully complete the setup.",
             level=2,
         )
         logging.info("Development Setup completed")
@@ -530,7 +530,7 @@ def add_project_option(parser: argparse.ArgumentParser):
         "-n",
         "--project",
         help="Project Name",
-        default="frappe",
+        default="heraos",
     )
     return parser
 
@@ -579,7 +579,7 @@ def add_common_parser(parser: argparse.ArgumentParser):
         "-l",
         "--force-pull",
         action="store_true",
-        help="Force pull frappe_docker",
+        help="Force pull heraos_docker",
     )
     return parser
 
@@ -596,21 +596,21 @@ def add_build_parser(subparsers: argparse.ArgumentParser):
     )
     parser.add_argument(
         "-r",
-        "--frappe-path",
-        help="Frappe Repository to use, default: https://github.com/frappe/frappe",
-        default="https://github.com/frappe/frappe",
+        "--heraos-path",
+        help="Hera Repository to use, default: https://github.com/MartinKyng/heracore",
+        default="https://github.com/MartinKyng/heracore",
     )
     parser.add_argument(
         "-b",
-        "--frappe-branch",
-        help="Frappe branch to use, default: version-15",
+        "--heraos-branch",
+        help="HeraOS branch to use, default: version-15",
         default="version-15",
     )
     parser.add_argument(
         "-j",
         "--apps-json",
-        help="Path to apps json, default: frappe_docker/development/apps-example.json",
-        default="frappe_docker/development/apps-example.json",
+        help="Path to apps json, default: heraos_docker/development/apps-example.json",
+        default="heraos_docker/development/apps-example.json",
     )
     parser.add_argument(
         "-t",
@@ -660,7 +660,7 @@ def add_deploy_parser(subparsers: argparse.ArgumentParser):
 def add_develop_parser(subparsers: argparse.ArgumentParser):
     parser = subparsers.add_parser("develop", help="Development setup using compose")
     parser.add_argument(
-        "-n", "--project", default="frappe", help="Compose project name"
+        "-n", "--project", default="heraos", help="Compose project name"
     )
 
 
@@ -676,8 +676,8 @@ def add_exec_parser(subparsers: argparse.ArgumentParser):
 
 def build_image(
     push: bool,
-    frappe_path: str,
-    frappe_branch: str,
+    heraos_path: str,
+    heraos_branch: str,
     containerfile_path: str,
     apps_json_path: str,
     tags: List[str],
@@ -685,7 +685,7 @@ def build_image(
     node_version: str,
 ):
     if not check_repo_exists():
-        clone_frappe_docker_repo()
+        clone_heraos_docker_repo()
     install_container_runtime()
 
     if not tags:
@@ -713,8 +713,8 @@ def build_image(
 
     command += [
         f"--file={containerfile_path}",
-        f"--build-arg=FRAPPE_PATH={frappe_path}",
-        f"--build-arg=FRAPPE_BRANCH={frappe_branch}",
+        f"--build-arg=HERAOS_PATH={heraos_path}",
+        f"--build-arg=HERAOS_BRANCH={heraos_branch}",
         f"--build-arg=PYTHON_VERSION={python_version}",
         f"--build-arg=NODE_VERSION={node_version}",
         f"--build-arg=APPS_JSON_BASE64={apps_json_base64}",
@@ -725,7 +725,7 @@ def build_image(
         subprocess.run(
             command,
             check=True,
-            cwd="frappe_docker",
+            cwd="heraos_docker",
         )
     except Exception as e:
         logging.error("Image build failed", exc_info=True)
@@ -745,7 +745,7 @@ def build_image(
 
 def get_args_parser():
     parser = argparse.ArgumentParser(
-        description="Easy install script for Frappe Framework"
+        description="Easy install script for HeraCore"
     )
     # Setup sub-commands
     subparsers = parser.add_subparsers(dest="subcommand")
@@ -774,16 +774,16 @@ if __name__ == "__main__":
     if (
         args.subcommand != "exec"
         and args.force_pull
-        and os.path.exists(get_frappe_docker_path())
+        and os.path.exists(get_heraos_docker_path())
     ):
-        cprint("\nForce pull frappe_docker again\n", level=2)
-        shutil.rmtree(get_frappe_docker_path(), ignore_errors=True)
+        cprint("\nForce pull heraos_docker again\n", level=2)
+        shutil.rmtree(get_heraos_docker_path(), ignore_errors=True)
 
     if args.subcommand == "build":
         build_image(
             push=args.push,
-            frappe_path=args.frappe_path,
-            frappe_branch=args.frappe_branch,
+            heraos_path=args.heraos_path,
+            heraos_branch=args.heraos_branch,
             apps_json_path=args.apps_json,
             tags=args.tags,
             containerfile_path=args.containerfile,
