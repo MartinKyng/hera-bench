@@ -1,5 +1,5 @@
 [project]
-name = "heraos-bench"
+name = "hera-bench"
 description = "CLI to manage Multi-tenant deployments for HeraOS apps"
 readme = "README.md"
 license = "GPL-3.0-only"

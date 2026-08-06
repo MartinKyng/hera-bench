@@ -530,7 +530,7 @@ def add_project_option(parser: argparse.ArgumentParser):
         "-n",
         "--project",
         help="Project Name",
-        default="heraos",
+        default="hera",
     )
     return parser
 
@@ -596,13 +596,13 @@ def add_build_parser(subparsers: argparse.ArgumentParser):
     )
     parser.add_argument(
         "-r",
-        "--heraos-path",
+        "--hera-path",
         help="Hera Repository to use, default: https://github.com/MartinKyng/heracore",
         default="https://github.com/MartinKyng/heracore",
     )
     parser.add_argument(
         "-b",
-        "--heraos-branch",
+        "--hera-branch",
         help="HeraOS branch to use, default: version-15",
         default="version-15",
     )
@@ -660,7 +660,7 @@ def add_deploy_parser(subparsers: argparse.ArgumentParser):
 def add_develop_parser(subparsers: argparse.ArgumentParser):
     parser = subparsers.add_parser("develop", help="Development setup using compose")
     parser.add_argument(
-        "-n", "--project", default="heraos", help="Compose project name"
+        "-n", "--project", default="hera", help="Compose project name"
     )
 
 
