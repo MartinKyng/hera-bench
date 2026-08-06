@@ -1,20 +1,20 @@
-# name: HeraOS CI
-# on: [push, pull_request]
-# jobs:
-#   test:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - uses: actions/checkout@v4
-#       - name: Setup Python
-#         uses: actions/setup-python@v5
-#         with: { python-version: "3.14" }
-#       - name: Install & Test
-#         run: |
-#           pip install heraos-bench
-#           heraos init test-bench --skip-redis-config-generation
-#           cd test-bench
-#           heraos get-app heraos ../
-#           heraos new-site test.localhost --db-type mariadb \
-#             --admin-password admin --mariadb-root-password root
-#           heraos --site test.localhost install-app heraos
-#           heraos --site test.localhost run-tests
+name: HeraOS CI
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with: { python-version: "3.14" }
+      - name: Install & Test
+        run: |
+          pip install heraos-bench
+          heraos init test-bench --skip-redis-config-generation
+          cd test-bench
+          heraos get-app heraos ../
+          heraos new-site test.localhost --db-type mariadb \
+            --admin-password admin --mariadb-root-password root
+          heraos --site test.localhost install-app heraos
+          heraos --site test.localhost run-tests
