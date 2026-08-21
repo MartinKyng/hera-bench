@@ -1,8 +1,14 @@
 name: Generate Semantic Release and publish on PyPI
+
 on:
   push:
     branches:
-      - v5.x
+      - develop
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
 jobs:
   release:
     name: Release
