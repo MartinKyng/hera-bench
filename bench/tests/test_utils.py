@@ -11,7 +11,7 @@ from bench.utils import is_valid_hera_branch
 
 class TestUtils(unittest.TestCase):
 	def test_app_utils(self):
-		git_url = "https://github.com/MartinKyng/hera_core"
+		git_url = "https://github.com/MartinKyng/hera"
 		branch = "develop"
 		app = App(name=git_url, branch=branch, bench=Bench("."))
 		self.assertTrue(
@@ -31,17 +31,17 @@ class TestUtils(unittest.TestCase):
 	def test_is_valid_hera_branch(self):
 		with self.assertRaises(InvalidRemoteException):
 			is_valid_hera_branch(
-				"https://github.com/MartinKyng/hera_core.git", hera_branch="random-branch"
+				"https://github.com/MartinKyng/hera.git", hera_branch="random-branch"
 			)
 			is_valid_hera_branch(
 				"https://github.com/random/random.git", hera_branch="random-branch"
 			)
 
 		is_valid_hera_branch(
-			"https://github.com/MartinKyng/hera_core.git", hera_branch="develop"
+			"https://github.com/MartinKyng/hera.git", hera_branch="develop"
 		)
 		is_valid_hera_branch(
-			"https://github.com/MartinKyng/hera_core.git", hera_branch="v13.29.0"
+			"https://github.com/MartinKyng/hera.git", hera_branch="v13.29.0"
 		)
 
 	def test_app_states(self):

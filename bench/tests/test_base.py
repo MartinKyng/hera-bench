@@ -104,7 +104,7 @@ class TestBenchBase(unittest.TestCase):
 
 		if not os.path.exists(hera_tmp_path):
 			exec_cmd(
-				f"git clone https://github.com/MartinKyng/hera_core -b {HERA_BRANCH} --depth 1 --origin upstream {hera_tmp_path}"
+				f"git clone https://github.com/MartinKyng/hera -b {HERA_BRANCH} --depth 1 --origin upstream {hera_tmp_path}"
 			)
 
 		kwargs.update(
@@ -119,7 +119,7 @@ class TestBenchBase(unittest.TestCase):
 		if not os.path.exists(os.path.join(self.benches_path, bench_name)):
 			init(bench_name, **kwargs)
 			exec_cmd(
-				"git remote set-url upstream https://github.com/MartinKyng/hera_core",
+				"git remote set-url upstream https://github.com/MartinKyng/hera",
 				cwd=os.path.join(self.benches_path, bench_name, "apps", "hera"),
 			)
 
