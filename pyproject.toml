@@ -1,6 +1,6 @@
 [project]
-name = "frappe-bench"
-description = "CLI to manage Multi-tenant deployments for Frappe apps"
+name = "Hera-bench"
+description = "CLI to manage Multi-tenant deployments for HeraOS apps"
 readme = "README.md"
 license = "GPL-3.0-only"
 requires-python = ">=3.10"
