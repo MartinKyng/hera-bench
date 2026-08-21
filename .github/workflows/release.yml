@@ -2,7 +2,7 @@ name: Generate Semantic Release and publish on PyPI
 on:
   push:
     branches:
-      - v5.x
+      - main
 jobs:
   release:
     name: Release
