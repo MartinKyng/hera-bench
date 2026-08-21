@@ -95,7 +95,7 @@ def switch_to_branch(branch, apps, upgrade=False):
 
 @click.command("switch-to-develop")
 def switch_to_develop(upgrade=False):
-	"Switch frappe and erpnext to develop branch"
+	"Switch hera and erpnext to develop branch"
 	from bench.utils.app import switch_to_develop
 
-	switch_to_develop(apps=["frappe", "erpnext"])
+	switch_to_develop(apps=["hera", "erpnext"])

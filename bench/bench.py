@@ -17,11 +17,11 @@ from bench.utils import (
 	paths_in_bench,
 	exec_cmd,
 	is_bench_directory,
-	is_frappe_app,
+	is_hera_app,
 	get_cmd_output,
 	get_git_version,
 	log,
-	run_frappe_cmd,
+	run_hera_cmd,
 	use_uv,
 )
 from bench.utils.bench import (
@@ -124,8 +124,8 @@ class Bench(Base, Validator):
 		self.apps.sync()
 
 	def uninstall(self, app, no_backup=False, force=False):
-		if app == "frappe":
-			raise ValidationError("You cannot uninstall the app `frappe`")
+		if app == "hera":
+			raise ValidationError("You cannot uninstall the app `hera`")
 		from bench.app import App
 
 		if not force:
@@ -143,7 +143,7 @@ class Bench(Base, Validator):
 	@step(title="Building Bench Assets", success="Bench Assets Built")
 	def build(self):
 		# build assets & stuff
-		run_frappe_cmd("build", bench_path=self.name)
+		run_hera_cmd("build", bench_path=self.name)
 
 	@step(title="Reloading Bench Processes", success="Bench Processes Reloaded")
 	def reload(self, web=False, supervisor=True, systemd=True, _raise=True):
@@ -200,10 +200,10 @@ class BenchApps(MutableSequence):
 			required = []
 		if self.apps and not os.path.exists(self.states_path):
 			# idx according to apps listed in apps.txt (backwards compatibility)
-			# Keeping frappe as the first app.
-			if "frappe" in self.apps:
-				self.apps.remove("frappe")
-				self.apps.insert(0, "frappe")
+			# Keeping hera as the first app.
+			if "hera" in self.apps:
+				self.apps.remove("hera")
+				self.apps.insert(0, "hera")
 				with open(self.bench.apps_txt, "w") as f:
 					f.write("\n".join(self.apps))
 
@@ -285,10 +285,10 @@ class BenchApps(MutableSequence):
 				x
 				for x in os.listdir(os.path.join(self.bench.name, "apps"))
 				# Directories with "." in name are usually git worktrees, not apps
-				if "." not in x and is_frappe_app(os.path.join(self.bench.name, "apps", x))
+				if "." not in x and is_hera_app(os.path.join(self.bench.name, "apps", x))
 			]
-			self.apps.remove("frappe")
-			self.apps.insert(0, "frappe")
+			self.apps.remove("hera")
+			self.apps.insert(0, "hera")
 		except (FileNotFoundError, ValueError):
 			self.apps = []
 
@@ -353,7 +353,7 @@ class BenchSetup(Base):
 		"""Setup env folder
 		- create env if not exists
 		- upgrade env pip
-		- install frappe python dependencies
+		- install hera python dependencies
 		"""
 		import bench.cli
 		import click
@@ -362,12 +362,12 @@ class BenchSetup(Base):
 
 		click.secho("Setting Up Environment", fg="yellow")
 
-		frappe = os.path.join(self.bench.name, "apps", "frappe")
+		hera = os.path.join(self.bench.name, "apps", "hera")
 		quiet_flag = "" if verbose else "--quiet"
 
 		if not os.path.exists(self.bench.python):
 			if use_uv():
-				if os.environ.get("FRAPPE_DOCKER_BUILD"):
+				if os.environ.get("HERA_DOCKER_BUILD"):
 					self.run(f"uv venv env --seed --link-mode=copy --python {python}", cwd=self.bench.name)
 				else:
 					self.run(f"uv venv env --seed --python {python}", cwd=self.bench.name)
@@ -377,13 +377,13 @@ class BenchSetup(Base):
 				self.pip()
 				self.wheel()
 
-		if os.path.exists(frappe):
+		if os.path.exists(hera):
 				env = None
 
-				from bench.utils.app import get_current_frappe_version
-				if get_current_frappe_version(self.bench.name) >= 16:
+				from bench.utils.app import get_current_hera_version
+				if get_current_hera_version(self.bench.name) >= 16:
 					check_pkg_config()
-					# macOS needs a custom PKG_CONFIG_DIR for frappe v16+
+					# macOS needs a custom PKG_CONFIG_DIR for hera v16+
 					if sys.platform == "darwin":
 						env = {
 							"PKG_CONFIG_PATH": get_mariadb_pkgconfig_path(),
@@ -391,12 +391,12 @@ class BenchSetup(Base):
 
 				if use_uv():
 					self.run(
-						f"uv pip install {quiet_flag} -e {frappe} --python {self.bench.python}",
+						f"uv pip install {quiet_flag} -e {hera} --python {self.bench.python}",
 						cwd=self.bench.name, env=env,
 					)
 				else:
 					self.run(
-						f"{self.bench.python} -m pip install {quiet_flag} --upgrade -e {frappe}",
+						f"{self.bench.python} -m pip install {quiet_flag} --upgrade -e {hera}",
 						cwd=self.bench.name, env=env,
 					)
 
@@ -476,7 +476,7 @@ class BenchSetup(Base):
 		from crontab import CronTab
 
 		bench_dir = os.path.abspath(self.bench.name)
-		user = self.bench.conf.get("frappe_user")
+		user = self.bench.conf.get("hera_user")
 		logfile = os.path.join(bench_dir, "logs", "backup.log")
 		system_crontab = CronTab(user=user)
 		backup_command = f"cd {bench_dir} && {sys.argv[0]} --verbose --site all backup"
@@ -522,10 +522,10 @@ class BenchSetup(Base):
 			app_path = os.path.join(self.bench.name, "apps", app)
 			log(f"\nInstalling python dependencies for {app}", level=3, no_log=True)
 			env = None
-			# macOS needs a custom PKG_CONFIG_DIR for frappe v16+
-			from bench.utils.app import get_current_frappe_version
-			if app == "frappe":
-				if get_current_frappe_version(self.bench.name) >= 16:
+			# macOS needs a custom PKG_CONFIG_DIR for hera v16+
+			from bench.utils.app import get_current_hera_version
+			if app == "hera":
+				if get_current_hera_version(self.bench.name) >= 16:
 					check_pkg_config()
 				if sys.platform == "darwin":
 					env = {
@@ -537,7 +537,7 @@ class BenchSetup(Base):
 				# Scope the upgrade to the app itself so uv doesn't eagerly bump shared
 				# transitive deps that already satisfy other installed apps' constraints.
 				# `uv pip install --upgrade` upgrades everything (eager), unlike pip's
-				# default only-if-needed strategy. See frappe/bench#1683.
+				# default only-if-needed strategy. See upstream bench issue #1683.
 				self.run(
 					f"uv pip install {quiet_flag} --upgrade-package {upgrade_package} -e {app_path} --python {self.bench.python}",
 					env=env,

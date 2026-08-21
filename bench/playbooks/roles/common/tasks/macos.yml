@@ -5,7 +5,7 @@
   become_user: root
   vars:
     bench_repo_path: "/Users/{{ ansible_user_id }}/.bench"
-    bench_path: "/Users/{{ ansible_user_id }}/frappe-bench"
+    bench_path: "/Users/{{ ansible_user_id }}/hera-bench"
   tasks:
     # install pre-requisites
     - name: install prequisites
@@ -29,7 +29,7 @@
       vars:
         mysql_conf_tpl: roles/mariadb/files/mariadb_config.cnf
 
-    # setup frappe-bench
+    # setup hera-bench
     - include_tasks: includes/setup_bench.yml
 
     # setup development environment

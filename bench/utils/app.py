@@ -21,7 +21,7 @@ from bench.exceptions import (
 )
 
 
-def is_version_upgrade(app="frappe", bench_path=".", branch=None):
+def is_version_upgrade(app="hera", bench_path=".", branch=None):
 	upstream_version = get_upstream_version(app=app, branch=branch, bench_path=bench_path)
 
 	if not upstream_version:
@@ -166,9 +166,9 @@ def get_upstream_version(app, branch=None, bench_path="."):
 	return get_version_from_string(contents)
 
 
-def get_current_frappe_version(bench_path="."):
+def get_current_hera_version(bench_path="."):
 	try:
-		return get_major_version(get_current_version("frappe", bench_path=bench_path))
+		return get_major_version(get_current_version("hera", bench_path=bench_path))
 	except OSError:
 		return 0
 

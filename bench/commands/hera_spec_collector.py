@@ -1,7 +1,7 @@
 """
-Collect the frappe click command tree and emit it as JSON to stdout.
+Collect the hera click command tree and emit it as JSON to stdout.
 
-Run inside the frappe virtualenv (bench's Python) so that frappe is importable.
+Run inside the hera virtualenv (bench's Python) so that hera is importable.
 Progress lines are written to stderr so they can be shown or suppressed
 independently of the JSON output.
 
@@ -9,18 +9,18 @@ stdout: JSON object mapping completion-key strings to
         {"options": [...], "value_options": [...], "path_options": [...],
          "path_positionals": [...], "commands": [...]}
 stderr: one line per command as it is scanned
-exit 1: if the frappe click group cannot be located
+exit 1: if the hera click group cannot be located
 """
 
 import json
 import sys
 
 import click
-import frappe.utils.bench_helper as _bh
+import hera.utils.bench_helper as _bh
 
 from completion_utils import param_expects_path
 
-FRAPPE_KEY = "__frappe__"
+HERA_KEY = "__hera__"
 MAX_DEPTH = 4
 
 
@@ -96,19 +96,19 @@ def _completion_spec(cmd, path, depth, result):
 
 
 def _walk(cmd, path, depth, result):
-	key = f"{FRAPPE_KEY} {' '.join(path)}" if path else FRAPPE_KEY
+	key = f"{HERA_KEY} {' '.join(path)}" if path else HERA_KEY
 	result[key] = _completion_spec(cmd, path, depth, result)
-	label = " ".join(["frappe", *path]) if path else "frappe"
+	label = " ".join(["hera", *path]) if path else "hera"
 	print(f"  {label}", file=sys.stderr, flush=True)
 
 
 app_groups = _bh.get_app_groups()
-frappe_group = app_groups.get("frappe")
+hera_group = app_groups.get("hera")
 
-if frappe_group is None or not hasattr(frappe_group, "commands"):
-	print("error: frappe group not found in bench_helper", file=sys.stderr)
+if hera_group is None or not hasattr(hera_group, "commands"):
+	print("error: hera group not found in bench_helper", file=sys.stderr)
 	sys.exit(1)
 
 result = {}
-_walk(frappe_group, [], 0, result)
+_walk(hera_group, [], 0, result)
 print(json.dumps(result))

@@ -1,29 +1,27 @@
 <div align="center">
 
-![Logo](https://raw.githubusercontent.com/frappe/bench/9f76d3a39891464a8eafdbb3084828eeb5314fde/resources/logo.png)
+![Logo](https://raw.githubusercontent.com/MartinKyng/hera-bench/develop/resources/logo.png)
 
 ## Bench
-**CLI to manage Frappe applications**
+**CLI to manage Hera applications**
 
 [![Python version](https://img.shields.io/badge/python-%3E=_3.10-green.svg)](https://www.python.org/downloads/)
-[![PyPI Version](https://badge.fury.io/py/frappe-bench.svg)](https://pypi.org/project/frappe-bench)
+[![PyPI Version](https://badge.fury.io/py/hera-bench.svg)](https://pypi.org/project/hera-bench)
 ![Platform Compatibility](https://img.shields.io/badge/platform-linux%20%7C%20macos-blue)
 
 </div>
 
-#### Update: We are working on a new simplified bench. Check it out at https://github.com/frappe/bench-cli
-
 ## Bench
 
-Bench is a command-line utility that helps you to install, update, and manage multiple sites for Frappe applications on [*nix systems](https://en.wikipedia.org/wiki/Unix-like) for development and production.
+Bench is a command-line utility that helps you to install, update, and manage multiple sites for Hera applications on [*nix systems](https://en.wikipedia.org/wiki/Unix-like) for development and production.
 
 ## Key features
 
-Bench helps you set up and manage your frappe sites with ease. Here are some of the key features:
+Bench helps you set up and manage your hera sites with ease. Here are some of the key features:
 - Initializing a new bench to work on sites and apps
-- Creating a new frappe site
+- Creating a new hera site
 - Creating and installing apps that can be used on the sites
-- Managing frappe sites
+- Managing hera sites
 - Managing site backups
 
 ## Installation
@@ -33,51 +31,40 @@ A typical bench setup provides two types of environments &mdash; Development and
 The setup for each of these installations can be achieved in multiple ways:
 
  - [Containerized Installation](#containerized-installation)
- - [Manual Installation](https://docs.frappe.io/framework/user/en/tutorial/install-and-setup-bench)
+ - [Manual Installation](https://github.com/MartinKyng/hera-bench/tree/develop/docs)
 
 We recommend using Docker Installation to setup a Production Environment. For Development, you may choose either of the two methods to setup an instance.
 
-Otherwise, if you are looking to evaluate Frappe apps without the hassle of managing hosting yourself, you can try them on [Frappe Cloud](https://frappecloud.com/).
-
-<div>
-	<a href="https://frappecloud.com/dashboard/signup" target="_blank">
-		<picture>
-			<source media="(prefers-color-scheme: dark)" srcset="https://frappe.io/files/try-on-fc-white.png">
-			<img src="https://frappe.io/files/try-on-fc-black.png" alt="Try on Frappe Cloud" height="28" />
-		</picture>
-	</a>
-</div>
-
 ### Containerized Installation
 
-A Frappe instance can be setup and replicated easily using [Docker](https://docker.com). The officially supported Docker installation can be used to setup either of both Development and Production environments.
+A Hera instance can be setup and replicated easily using [Docker](https://docker.com). The officially supported Docker installation can be used to setup either of both Development and Production environments.
 
 To setup either of the environments, you will need to clone the official docker repository:
 
 ```sh
-git clone https://github.com/frappe/frappe_docker.git
+git clone https://github.com/MartinKyng/hera_docker.git
 ```
 
-A quick setup guide for both the environments can be found below. For more details, check out the [Frappe Docker Repository](https://github.com/frappe/frappe_docker).
+A quick setup guide for both the environments can be found below. For more details, check out the [Hera Docker Repository](https://github.com/MartinKyng/hera_docker).
 
 ### Easy Install Script
 
-The Easy Install script should get you going with a Frappe setup with minimal manual intervention and effort.
+The Easy Install script should get you going with a Hera setup with minimal manual intervention and effort.
 
-This script uses Docker with the [Frappe Docker Repository](https://github.com/frappe/frappe_docker) and can be used for both Development setup and Production setup.
+This script uses Docker with the [Hera Docker Repository](https://github.com/MartinKyng/hera_docker) and can be used for both Development setup and Production setup.
 
 #### Setup
 
 Download the Easy Install script and execute it:
 
 ```sh
-wget https://raw.githubusercontent.com/frappe/bench/develop/easy-install.py
+wget https://raw.githubusercontent.com/MartinKyng/hera-bench/develop/easy-install.py
 python3 easy-install.py deploy --email=user@domain.tld --sitename=subdomain.domain.tld --app=erpnext
 ```
 
 This script will install docker on your system and will fetch the required containers, setup bench and a default ERPNext instance.
 
-The script will generate MySQL root password and an Administrator password for the Frappe/ERPNext instance, which will then be saved under `$HOME/passwords.txt` of the user used to setup the instance.
+The script will generate MySQL root password and an Administrator password for the Hera/ERPNext instance, which will then be saved under `$HOME/passwords.txt` of the user used to setup the instance.
 It will also generate a new compose file under `$HOME/<project-name>-compose.yml`.
 
 When the setup is complete, you will be able to access the system at `http://<your-server-ip>`, wherein you can use the Administrator password to login.
@@ -91,7 +78,7 @@ Here are the arguments for the easy-install script
 
 ```txt
 usage: easy-install.py build [-h] [-n PROJECT] [-i IMAGE] [-q] [-m HTTP_PORT] [-v VERSION] [-a APPS] [-s SITES] [-e EMAIL] [--confirm-site-mismatch]
-                             [-p] [-r FRAPPE_PATH] [-b FRAPPE_BRANCH] [-j APPS_JSON] [-t TAGS] [-c CONTAINERFILE]
+                             [-p] [-r HERA_PATH] [-b HERA_BRANCH] [-j APPS_JSON] [-t TAGS] [-c CONTAINERFILE]
                              [-y PYTHON_VERSION] [-d NODE_VERSION] [-x] [-u]
 
 options:
@@ -115,12 +102,12 @@ options:
   --confirm-site-mismatch
                         Allow overwriting existing .env sites when --sitename differs from configured sites inside the .env
   -p, --push            Push the built image to registry
-  -r FRAPPE_PATH, --frappe-path FRAPPE_PATH
-                        Frappe Repository to use, default: https://github.com/frappe/frappe
-  -b FRAPPE_BRANCH, --frappe-branch FRAPPE_BRANCH
-                        Frappe branch to use, default: version-15
+  -r HERA_PATH, --hera-path HERA_PATH
+                        Hera Repository to use, default: https://github.com/MartinKyng/hera
+  -b HERA_BRANCH, --hera-branch HERA_BRANCH
+                        Hera branch to use, default: version-15
   -j APPS_JSON, --apps-json APPS_JSON
-                        Path to apps json, default: frappe_docker/development/apps-example.json
+                        Path to apps json, default: hera_docker/development/apps-example.json
   -t TAGS, --tag TAGS   Full Image Name(s), default: custom-apps:latest
   -c CONTAINERFILE, --containerfile CONTAINERFILE
                         Path to Containerfile: images/layered/Containerfile
@@ -219,7 +206,7 @@ Example apps.json
 ```json
 [
   {
-    "url": "https://github.com/frappe/wiki.git",
+    "url": "https://github.com/MartinKyng/wiki.git",
     "branch": "master"
   }
 ]
@@ -235,7 +222,7 @@ $ python3 easy-install.py build \
 	--version=latest \
 	--deploy \
 	--project=actions_test \
-	--email=test@frappe.io \
+	--email=admin@example.com \
 	--apps-json=apps.json \
 	--app=wiki
 ```
@@ -249,7 +236,7 @@ Note:
 - `--app`, app to install on site creation, can be multiple.
 - `--deploy`, flag to deploy after build/push is complete
 - `--project=actions_test`, name of the project, compose file with project name will be stored in user home directory.
-- `--email=test@frappe.io`, valid email for letsencrypt certificate expiry notification.
+- `--email=admin@example.com`, valid email for letsencrypt certificate expiry notification.
 - `--apps-json`, path to json file with list of apps to be added to bench.
 - `SITES_RULE` is used for site routing rules (Traefik v3). Legacy `SITES` values are still read for backward compatibility, but are deprecated.
 - If `--sitename` differs from existing sites in `<project>.env`, setup aborts unless `--confirm-site-mismatch` is provided.
@@ -322,38 +309,31 @@ bench completions --zsh
 bench completions --bash
 ```
 
-> **Note:** Run this from your frappe-bench directory. The command detects the bench root from the current working directory to include your installed apps' commands in the completion script.
+> **Note:** Run this from your hera-bench directory. The command detects the bench root from the current working directory to include your installed apps' commands in the completion script.
 
 This writes a completion script to `~/.config/bench/` and appends a `source` line to your shell rc file. Re-run it after installing new apps or upgrading bench, since the script is generated from the current command tree.
 
 
-For more in-depth information on commands and their usage, follow [Commands and Usage](https://github.com/frappe/bench/blob/develop/docs/commands_and_usage.md). As for a consolidated list of bench commands, check out [Bench Usage](https://github.com/frappe/bench/blob/develop/docs/bench_usage.md).
+For more in-depth information on commands and their usage, follow [Commands and Usage](https://github.com/MartinKyng/hera-bench/blob/develop/docs/commands_and_usage.md). As for a consolidated list of bench commands, check out [Bench Usage](https://github.com/MartinKyng/hera-bench/blob/develop/docs/bench_usage.md).
 
-![Help](https://raw.githubusercontent.com/frappe/bench/9f76d3a39891464a8eafdbb3084828eeb5314fde/resources/help.png)
+![Help](https://raw.githubusercontent.com/MartinKyng/hera-bench/develop/resources/help.png)
 
 
 ## Custom Bench Commands
 
-If you wish to extend the capabilities of bench with your own custom Frappe Application, you may follow [Adding Custom Bench Commands](https://github.com/frappe/bench/blob/develop/docs/bench_custom_cmd.md).
+If you wish to extend the capabilities of bench with your own custom Hera Application, you may follow [Adding Custom Bench Commands](https://github.com/MartinKyng/hera-bench/blob/develop/docs/bench_custom_cmd.md).
 
 
 ## Guides
 
-- [Configuring HTTPS](https://docs.frappe.io/framework/user/en/bench/guides/configuring-https)
-- [Using Let's Encrypt to setup HTTPS](https://docs.frappe.io/framework/user/en/bench/guides/lets-encrypt-ssl-setup)
-- [Diagnosing the Scheduler](https://docs.frappe.io/framework/user/en/bench/guides/diagnosing-the-scheduler)
-- [Change Hostname](https://docs.frappe.io/framework/user/en/bench/guides/adding-custom-domains)
-- [Manual Setup](https://docs.frappe.io/framework/user/en/tutorial/install-and-setup-bench)
-- [Setup Production](https://docs.frappe.io/framework/user/en/bench/guides/setup-production)
-- [Setup Multitenancy](https://docs.frappe.io/framework/user/en/bench/guides/setup-multitenancy)
-- [Stopping Production](https://github.com/frappe/bench/wiki/Stopping-Production-and-starting-Development)
-
-
-## Resources
-
-- [Bench Commands Cheat Sheet](https://docs.frappe.io/framework/user/en/bench/resources/bench-commands-cheatsheet)
-- [Background Services](https://docs.frappe.io/framework/user/en/bench/resources/background-services)
-- [Bench Procfile](https://docs.frappe.io/framework/user/en/bench/resources/bench-procfile)
+- [Installation](docs/installation.md)
+- [Commands and Usage](docs/commands_and_usage.md)
+- [Bench Usage](docs/bench_usage.md)
+- [Adding Custom Bench Commands](docs/bench_custom_cmd.md)
+- [Releasing Hera Apps](docs/releasing_hera_apps.md)
+- [Branch Details](docs/branch_details.md)
+- [Release Policy](docs/release_policy.md)
+- [Decoupling from Frappe](docs/decoupling-from-frappe.md)
 
 
 ## Development
@@ -362,12 +342,12 @@ To contribute and develop on the bench CLI tool, clone this repo and create an e
 
 	WARN: bench is installed in editable mode!
 
-	This is not the recommended mode of installation for production. Instead, install the package from PyPI with: `pip install frappe-bench`
+	This is not the recommended mode of installation for production. Instead, install the package from PyPI with: `pip install hera-bench`
 
 ### Clone and install
 
 ```sh
-git clone https://github.com/frappe/bench ~/bench-repo
+git clone https://github.com/MartinKyng/hera-bench ~/bench-repo
 pip install -e ~/bench-repo
 ```
 
@@ -380,12 +360,12 @@ This should display $HOME/bench-repo
 
 ```sh
 # Delete bench installed in editable install
-pip uninstall frappe-bench
+pip uninstall hera-bench
 ```
 
 ### Then you can install the latest from PyPI
 ```sh
-pip install -U frappe-bench
+pip install -U hera-bench
 ```
 
 To confirm the switch, check the output of `bench src`. It should change from something like `$HOME/bench-repo` to `/usr/local/lib/python3.12/dist-packages` and stop the editable install warnings from getting triggered at every command.
@@ -393,31 +373,26 @@ To confirm the switch, check the output of `bench src`. It should change from so
 
 ## Releases
 
-Bench's version information can be accessed via `bench.VERSION` in the package's __init__.py file. Ever since the v5.0 release, we've started publishing releases on GitHub, and PyPI.
+Bench's version information can be accessed via `bench.VERSION` in the package's __init__.py file. Releases are published on GitHub and PyPI.
 
-[GitHub](https://github.com/frappe/bench/releases)
-[Pypi](https://pypi.org/project/frappe-bench)
+[GitHub](https://github.com/MartinKyng/hera-bench/releases)
+[Pypi](https://pypi.org/project/hera-bench)
 
 
 ## Learn and connect
 
-- [Discuss](https://discuss.frappe.io/)
-- [YouTube](https://www.youtube.com/@frappetech)
+- [Discuss](https://github.com/MartinKyng/hera-bench/discussions)
+- [Issues](https://github.com/MartinKyng/hera-bench/issues)
 
 ## Contribute
-To contribute to this project, please review the [Contribution Guidelines](https://github.com/frappe/erpnext/wiki/Contribution-Guidelines) for detailed instructions. Make sure to follow our [Code of Conduct](https://github.com/frappe/frappe/blob/develop/CODE_OF_CONDUCT.md) to keep the community welcoming and respectful.
+To contribute to this project, please review the [Contribution Guidelines](docs/contribution_guidelines.md) for detailed instructions.
 
 ## Security
-The Frappe team and community prioritize security. If you discover a security issue, please report it via our [Security Report Form](https://frappe.io/security).
-Your responsible disclosure helps keep Frappe and its users safe. We'll do our best to respond quickly and keep you informed throughout the process.
-For guidelines on reporting, check out our [Reporting Guidelines](https://frappe.io/security), and review our [Logo and Trademark Policy](https://github.com/frappe/erpnext/blob/develop/TRADEMARK_POLICY.md) for branding information.
+The Hera team and community prioritize security. If you discover a security issue, please report it via our [Security Report Form](https://github.com/MartinKyng/hera-bench/security).
+Your responsible disclosure helps keep Hera and its users safe. We'll do our best to respond quickly and keep you informed throughout the process.
+For guidelines on reporting, check out our [Reporting Guidelines](https://github.com/MartinKyng/hera-bench/security).
 
 <br/><br/>
 <div align="center">
-	<a href="https://frappe.io" target="_blank">
-		<picture>
-			<source media="(prefers-color-scheme: dark)" srcset="https://frappe.io/files/Frappe-white.png">
-			<img src="https://frappe.io/files/Frappe-black.png" alt="Frappe Technologies" height="28"/>
-		</picture>
-	</a>
+	<sub>Built by Royal Technologies.</sub>
 </div>

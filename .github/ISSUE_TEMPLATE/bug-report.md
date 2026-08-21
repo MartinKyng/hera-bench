@@ -7,9 +7,7 @@ labels: bug
 Issue: Bug report
 
 Please make sure your issue is reproducible on the latest bench version. The currently supported branches are:
- - PyPI [latest](https://pypi.org/project/frappe-bench/) 
- - master         (minor bug fixes)
- - v5.x           (Merged with develop on every release)
+ - PyPI [latest](https://pypi.org/project/hera-bench/)
  - develop        (all updates)
 
 **Do the checklist before filing an issue:**
@@ -36,13 +34,13 @@ If applicable, add screenshots to help explain your problem.
 - [ ] Linux: `distro:version`
 - [ ] macOS: `version`
 - [ ] Windows `version`
-- [ ] Others? `haros:distro:version`
+- [ ] Others? `distro:version`
 
 **Version Information**
 
 Can be found out by running `bench version` in your respective bench folder.
 - Bench Branch:
-- Frappe Version:
+- Hera Version:
 - ERPNext Version:
 
 **Additional context** :page_facing_up:

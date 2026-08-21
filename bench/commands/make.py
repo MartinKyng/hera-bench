@@ -6,10 +6,10 @@ import click
 @click.argument("path")
 @click.option(
 	"--version",
-	"--frappe-branch",
-	"frappe_branch",
+	"--hera-branch",
+	"hera_branch",
 	default=None,
-	help="Clone a particular branch of frappe",
+	help="Clone a particular branch of hera",
 )
 @click.option(
 	"--ignore-exist", is_flag=True, default=False, help="Ignore if Bench instance exists."
@@ -20,7 +20,7 @@ import click
 @click.option(
 	"--apps_path", default=None, help="path to json files with apps to install after init"
 )
-@click.option("--frappe-path", default=None, help="path to frappe repo")
+@click.option("--hera-path", default=None, help="path to hera repo")
 @click.option("--clone-from", default=None, help="copy repos from path")
 @click.option(
 	"--clone-without-update", is_flag=True, help="copy repos from path without update"
@@ -48,8 +48,8 @@ import click
 def init(
 	path,
 	apps_path,
-	frappe_path,
-	frappe_branch,
+	hera_path,
+	hera_branch,
 	no_procfile,
 	no_backups,
 	clone_from,
@@ -77,8 +77,8 @@ def init(
 			apps_path=apps_path,  # can be used from --config flag? Maybe config file could have more info?
 			no_procfile=no_procfile,
 			no_backups=no_backups,
-			frappe_path=frappe_path,
-			frappe_branch=frappe_branch,
+			hera_path=hera_path,
+			hera_branch=hera_branch,
 			install_app=install_app,
 			clone_from=clone_from,
 			skip_redis_config_generation=skip_redis_config_generation,
@@ -191,12 +191,12 @@ def get_app(
 	)
 
 
-@click.command("new-app", help="Create a new Frappe application under apps folder")
+@click.command("new-app", help="Create a new Hera application under apps folder")
 @click.option(
 	"--no-git",
 	is_flag=True,
 	flag_value="--no-git",
-	help="Do not initialize git repository for the app (available in Frappe v14+)",
+	help="Do not initialize git repository for the app (available in Hera v14+)",
 )
 @click.argument("app-name")
 def new_app(app_name, no_git=None):
@@ -262,11 +262,11 @@ def pip(ctx, args):
 
 @click.command(
 	"validate-dependencies",
-	help="Validates that all requirements specified in frappe-dependencies are met curently.",
+	help="Validates that all requirements specified in hera-dependencies are met curently.",
 )
 @click.pass_context
 def validate_dependencies(ctx):
-	"Validate all specified frappe-dependencies."
+	"Validate all specified hera-dependencies."
 	from bench.bench import Bench
 	from bench.app import App
 

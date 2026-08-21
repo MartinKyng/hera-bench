@@ -5,7 +5,7 @@
 
   vars:
     bench_repo_path: "/Users/{{ ansible_user_id }}/.bench"
-    bench_path: "/Users/{{ ansible_user_id }}/frappe-bench"
+    bench_path: "/Users/{{ ansible_user_id }}/hera-bench"
 
   tasks:
     - name: install prequisites
@@ -31,7 +31,7 @@
     - name: Install MySQLdb in global env
       pip: name=mysql-python version=1.2.5
 
-    # setup frappe-bench
+    # setup hera-bench
     - include_tasks: includes/setup_bench.yml
 
     # setup development environment

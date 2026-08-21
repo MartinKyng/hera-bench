@@ -53,17 +53,17 @@ def generate_systemd_config(
 	background_workers = []
 	for i in range(number_of_workers):
 		background_workers.append(
-			get_bench_name(bench_path) + "-frappe-default-worker@" + str(i + 1) + ".service"
+			get_bench_name(bench_path) + "-hera-default-worker@" + str(i + 1) + ".service"
 		)
 
 	for i in range(number_of_workers):
 		background_workers.append(
-			get_bench_name(bench_path) + "-frappe-short-worker@" + str(i + 1) + ".service"
+			get_bench_name(bench_path) + "-hera-short-worker@" + str(i + 1) + ".service"
 		)
 
 	for i in range(number_of_workers):
 		background_workers.append(
-			get_bench_name(bench_path) + "-frappe-long-worker@" + str(i + 1) + ".service"
+			get_bench_name(bench_path) + "-hera-long-worker@" + str(i + 1) + ".service"
 		)
 
 	web_worker_count = config.get(
@@ -118,7 +118,7 @@ def setup_systemd_directory(bench_path):
 
 def setup_main_config(bench_info, bench_path):
 	# Main config
-	bench_template = bench.config.env().get_template("systemd/frappe-bench.target")
+	bench_template = bench.config.env().get_template("systemd/hera-bench.target")
 	bench_config = bench_template.render(**bench_info)
 	bench_config_path = os.path.join(
 		bench_path, "config", "systemd", bench_info.get("bench_name") + ".target"
@@ -131,19 +131,19 @@ def setup_main_config(bench_info, bench_path):
 def setup_workers_config(bench_info, bench_path):
 	# Worker Group
 	bench_workers_target_template = bench.config.env().get_template(
-		"systemd/frappe-bench-workers.target"
+		"systemd/hera-bench-workers.target"
 	)
 	bench_default_worker_template = bench.config.env().get_template(
-		"systemd/frappe-bench-frappe-default-worker.service"
+		"systemd/hera-bench-hera-default-worker.service"
 	)
 	bench_short_worker_template = bench.config.env().get_template(
-		"systemd/frappe-bench-frappe-short-worker.service"
+		"systemd/hera-bench-hera-short-worker.service"
 	)
 	bench_long_worker_template = bench.config.env().get_template(
-		"systemd/frappe-bench-frappe-long-worker.service"
+		"systemd/hera-bench-hera-long-worker.service"
 	)
 	bench_schedule_worker_template = bench.config.env().get_template(
-		"systemd/frappe-bench-frappe-schedule.service"
+		"systemd/hera-bench-hera-schedule.service"
 	)
 
 	bench_workers_target_config = bench_workers_target_template.render(**bench_info)
@@ -159,25 +159,25 @@ def setup_workers_config(bench_info, bench_path):
 		bench_path,
 		"config",
 		"systemd",
-		bench_info.get("bench_name") + "-frappe-default-worker@.service",
+		bench_info.get("bench_name") + "-hera-default-worker@.service",
 	)
 	bench_short_worker_config_path = os.path.join(
 		bench_path,
 		"config",
 		"systemd",
-		bench_info.get("bench_name") + "-frappe-short-worker@.service",
+		bench_info.get("bench_name") + "-hera-short-worker@.service",
 	)
 	bench_long_worker_config_path = os.path.join(
 		bench_path,
 		"config",
 		"systemd",
-		bench_info.get("bench_name") + "-frappe-long-worker@.service",
+		bench_info.get("bench_name") + "-hera-long-worker@.service",
 	)
 	bench_schedule_worker_config_path = os.path.join(
 		bench_path,
 		"config",
 		"systemd",
-		bench_info.get("bench_name") + "-frappe-schedule.service",
+		bench_info.get("bench_name") + "-hera-schedule.service",
 	)
 
 	with open(bench_workers_target_config_path, "w") as f:
@@ -199,13 +199,13 @@ def setup_workers_config(bench_info, bench_path):
 def setup_web_config(bench_info, bench_path):
 	# Web Group
 	bench_web_target_template = bench.config.env().get_template(
-		"systemd/frappe-bench-web.target"
+		"systemd/hera-bench-web.target"
 	)
 	bench_web_service_template = bench.config.env().get_template(
-		"systemd/frappe-bench-frappe-web.service"
+		"systemd/hera-bench-hera-web.service"
 	)
 	bench_node_socketio_template = bench.config.env().get_template(
-		"systemd/frappe-bench-node-socketio.service"
+		"systemd/hera-bench-node-socketio.service"
 	)
 
 	bench_web_target_config = bench_web_target_template.render(**bench_info)
@@ -216,7 +216,7 @@ def setup_web_config(bench_info, bench_path):
 		bench_path, "config", "systemd", bench_info.get("bench_name") + "-web.target"
 	)
 	bench_web_service_config_path = os.path.join(
-		bench_path, "config", "systemd", bench_info.get("bench_name") + "-frappe-web.service"
+		bench_path, "config", "systemd", bench_info.get("bench_name") + "-hera-web.service"
 	)
 	bench_node_socketio_config_path = os.path.join(
 		bench_path,
@@ -238,13 +238,13 @@ def setup_web_config(bench_info, bench_path):
 def setup_redis_config(bench_info, bench_path):
 	# Redis Group
 	bench_redis_target_template = bench.config.env().get_template(
-		"systemd/frappe-bench-redis.target"
+		"systemd/hera-bench-redis.target"
 	)
 	bench_redis_cache_template = bench.config.env().get_template(
-		"systemd/frappe-bench-redis-cache.service"
+		"systemd/hera-bench-redis-cache.service"
 	)
 	bench_redis_queue_template = bench.config.env().get_template(
-		"systemd/frappe-bench-redis-queue.service"
+		"systemd/hera-bench-redis-queue.service"
 	)
 
 	bench_redis_target_config = bench_redis_target_template.render(**bench_info)
@@ -300,11 +300,11 @@ def get_unit_files(bench_path):
 		[bench_name + "-workers", ".target"],
 		[bench_name + "-web", ".target"],
 		[bench_name + "-redis", ".target"],
-		[bench_name + "-frappe-default-worker@", ".service"],
-		[bench_name + "-frappe-short-worker@", ".service"],
-		[bench_name + "-frappe-long-worker@", ".service"],
-		[bench_name + "-frappe-schedule", ".service"],
-		[bench_name + "-frappe-web", ".service"],
+		[bench_name + "-hera-default-worker@", ".service"],
+		[bench_name + "-hera-short-worker@", ".service"],
+		[bench_name + "-hera-long-worker@", ".service"],
+		[bench_name + "-hera-schedule", ".service"],
+		[bench_name + "-hera-web", ".service"],
 		[bench_name + "-node-socketio", ".service"],
 		[bench_name + "-redis-cache", ".service"],
 		[bench_name + "-redis-queue", ".service"],

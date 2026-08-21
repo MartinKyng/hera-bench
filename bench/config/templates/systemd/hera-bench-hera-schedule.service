@@ -1,5 +1,5 @@
 [Unit]
-Description="{{ bench_name }}-frappe-schedule"
+Description="{{ bench_name }}-hera-schedule"
 PartOf={{ bench_name }}-workers.target
 
 [Service]

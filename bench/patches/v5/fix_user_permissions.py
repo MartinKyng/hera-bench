@@ -51,7 +51,7 @@ def is_production_set(bench_path):
 
 def execute(bench_path):
 	"""This patch checks if bench sudoers is set and regenerate supervisor and sudoers files"""
-	user = get_config(".").get("frappe_user") or getpass.getuser()
+	user = get_config(".").get("hera_user") or getpass.getuser()
 
 	if is_sudoers_set():
 		if is_production_set(bench_path):

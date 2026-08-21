@@ -1,18 +1,18 @@
-## How are Frappe Framework commands available via bench?
+## How are Hera Framework commands available via bench?
 
-bench utilizes `frappe.utils.bench_manager` to get the framework's as well as those of any custom commands written in application installed in the Frappe environment. Currently, with *version 12* there are commands related to the scheduler, sites, translations and other utils in Frappe inherited by bench.
+bench utilizes `hera.utils.bench_manager` to get the framework's as well as those of any custom commands written in application installed in the Hera environment. Currently, with *version 12* there are commands related to the scheduler, sites, translations and other utils in Hera inherited by bench.
 
 
 ## Can I add CLI commands in my custom app and call them via bench?
 
-Along with the framework commands, Frappe's `bench_manager` module also searches for any commands in your custom applications. Thereby, bench communicates with the respective bench's Frappe which in turn checks for available commands in all of the applications.
+Along with the framework commands, Hera's `bench_manager` module also searches for any commands in your custom applications. Thereby, bench communicates with the respective bench's Hera which in turn checks for available commands in all of the applications.
 
 To make your custom command available to bench, just create a `commands` module under your parent module and write the command with a click wrapper and a variable commands which contains a list of click functions, which are your own commands. The directory structure may be visualized as:
 
 ```
-frappe-bench
+hera-bench
 |──apps
-    |── frappe
+    |── hera
     ├── custom_app
     │   ├── README.md
     │   ├── custom_app
@@ -25,7 +25,7 @@ frappe-bench
 The commands module maybe a single file such as `commands.py` or a directory with an `__init__.py` file. For a custom application of name 'flags', example may be given as
 
 ```python
-# file_path: frappe-bench/apps/flags/flags/commands.py
+# file_path: hera-bench/apps/flags/flags/commands.py
 import click
 
 @click.command('set-flags')
