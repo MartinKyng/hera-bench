@@ -114,9 +114,9 @@ def can_enable_multi_queue_consumption(bench_path: str) -> bool:
 
 		supported_version = Version(major=14, minor=18, patch=0)
 
-		frappe_version = Version(get_current_version("frappe", bench_path=bench_path))
+		hera_version = Version(get_current_version("hera", bench_path=bench_path))
 
-		return frappe_version > supported_version
+		return hera_version > supported_version
 	except Exception:
 		return False
 
@@ -124,7 +124,7 @@ def can_enable_multi_queue_consumption(bench_path: str) -> bool:
 def check_supervisord_config(user=None):
 	"""From bench v5.x, we're moving to supervisor running as user"""
 	# i don't think bench should be responsible for this but we're way past this now...
-	# removed updating supervisord conf & reload in Aug 2022 - gavin@frappe.io
+	# removed updating supervisord conf & reload in Aug 2022 - gavin@hera.io
 	import configparser
 
 	if not user:

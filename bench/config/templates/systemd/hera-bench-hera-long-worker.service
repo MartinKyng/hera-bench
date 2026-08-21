@@ -1,5 +1,5 @@
 [Unit]
-Description="{{ bench_name }}-frappe-short-worker %I"
+Description="{{ bench_name }}-hera-short-worker %I"
 PartOf={{ bench_name }}-workers.target
 
 [Service]

@@ -4,7 +4,7 @@
 
 To update the bench CLI tool, depending on your method of installation, you may use 
 
-	pip3 install -U frappe-bench
+	pip3 install -U hera-bench
 
 
 To backup, update all apps and sites on your bench, you may use
@@ -30,21 +30,21 @@ You can also run the parts of the bench selectively.
 
 * Create a new bench
 
-	The init command will create a bench directory with frappe framework installed. It will be setup for periodic backups and auto updates once a day.
+	The init command will create a bench directory with hera framework installed. It will be setup for periodic backups and auto updates once a day.
 
-		bench init frappe-bench && cd frappe-bench
+		bench init hera-bench && cd hera-bench
 
 * Add a site
 
-	Frappe apps are run by frappe sites and you will have to create at least one site. The new-site command allows you to do that.
+	Hera apps are run by hera sites and you will have to create at least one site. The new-site command allows you to do that.
 
 		bench new-site site1.local
 
 * Add apps
 
-	The get-app command gets remote frappe apps from a remote git repository and installs them. Example: [erpnext](https://github.com/frappe/erpnext)
+	The get-app command gets remote hera apps from a remote git repository and installs them. Example: [erpnext](https://github.com/MartinKyng/erpnext)
 
-		bench get-app erpnext https://github.com/frappe/erpnext
+		bench get-app erpnext https://github.com/MartinKyng/erpnext
 
 * Install apps
 
@@ -58,7 +58,7 @@ You can also run the parts of the bench selectively.
 
 		bench start
 
-	To login to Frappe / ERPNext, open your browser and go to `[your-external-ip]:8000`, probably `localhost:8000`
+	To login to Hera / ERPNext, open your browser and go to `[your-external-ip]:8000`, probably `localhost:8000`
 
 	The default username is "Administrator" and password is what you set when you created the new site.
 
@@ -69,6 +69,6 @@ You can also run the parts of the bench selectively.
 		bench setup manager
 
 1. Create new site bench-manager.local
-2. Gets the `bench_manager` app from https://github.com/frappe/bench_manager if it doesn't exist already
+2. Gets the `bench_manager` app from https://github.com/MartinKyng/hera-bench_manager if it doesn't exist already
 3. Installs the bench_manager app on the site bench-manager.local
 

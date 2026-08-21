@@ -34,7 +34,7 @@ from bench.utils.cli import (
 def bench_command(bench_path="."):
 	import bench
 
-	bench.set_frappe_version(bench_path=bench_path)
+	bench.set_hera_version(bench_path=bench_path)
 
 
 from bench.commands.make import (

@@ -56,7 +56,7 @@ class TestSetupProduction(TestBenchBase):
 			f = f.read()
 
 			for key in (
-				f"upstream {bench_name}-frappe",
+				f"upstream {bench_name}-hera",
 				f"upstream {bench_name}-socketio-server",
 			):
 				self.assertTrue(key in f)
@@ -68,7 +68,7 @@ class TestSetupProduction(TestBenchBase):
 		)
 
 	def assert_sudoers(self, user):
-		sudoers_file = "/etc/sudoers.d/frappe"
+		sudoers_file = "/etc/sudoers.d/hera"
 		service = which("service")
 		nginx = which("nginx")
 
@@ -100,7 +100,7 @@ class TestSetupProduction(TestBenchBase):
 			f = f.read()
 
 			tests = [
-				f"program:{bench_name}-frappe-web",
+				f"program:{bench_name}-hera-web",
 				f"program:{bench_name}-redis-cache",
 				f"program:{bench_name}-redis-queue",
 				f"group:{bench_name}-web",
@@ -114,20 +114,20 @@ class TestSetupProduction(TestBenchBase):
 			if use_rq:
 				tests.extend(
 					[
-						f"program:{bench_name}-frappe-schedule",
-						f"program:{bench_name}-frappe-default-worker",
-						f"program:{bench_name}-frappe-short-worker",
-						f"program:{bench_name}-frappe-long-worker",
+						f"program:{bench_name}-hera-schedule",
+						f"program:{bench_name}-hera-default-worker",
+						f"program:{bench_name}-hera-short-worker",
+						f"program:{bench_name}-hera-long-worker",
 					]
 				)
 
 			else:
 				tests.extend(
 					[
-						f"program:{bench_name}-frappe-workerbeat",
-						f"program:{bench_name}-frappe-worker",
-						f"program:{bench_name}-frappe-longjob-worker",
-						f"program:{bench_name}-frappe-async-worker",
+						f"program:{bench_name}-hera-workerbeat",
+						f"program:{bench_name}-hera-worker",
+						f"program:{bench_name}-hera-longjob-worker",
+						f"program:{bench_name}-hera-async-worker",
 					]
 				)
 
@@ -143,7 +143,7 @@ class TestSetupProduction(TestBenchBase):
 			out = get_cmd_output("supervisorctl status")
 
 		tests = [
-			r"{bench_name}-web:{bench_name}-frappe-web[\s]+RUNNING",
+			r"{bench_name}-web:{bench_name}-hera-web[\s]+RUNNING",
 			# Have commented for the time being. Needs to be uncommented later on. Bench is failing on travis because of this.
 			# It works on one bench and fails on another.giving FATAL or BACKOFF (Exited too quickly (process log may have details))
 			# "{bench_name}-web:{bench_name}-node-socketio[\s]+RUNNING",
@@ -154,20 +154,20 @@ class TestSetupProduction(TestBenchBase):
 		if use_rq:
 			tests.extend(
 				[
-					r"{bench_name}-workers:{bench_name}-frappe-schedule[\s]+RUNNING",
-					r"{bench_name}-workers:{bench_name}-frappe-default-worker-0[\s]+RUNNING",
-					r"{bench_name}-workers:{bench_name}-frappe-short-worker-0[\s]+RUNNING",
-					r"{bench_name}-workers:{bench_name}-frappe-long-worker-0[\s]+RUNNING",
+					r"{bench_name}-workers:{bench_name}-hera-schedule[\s]+RUNNING",
+					r"{bench_name}-workers:{bench_name}-hera-default-worker-0[\s]+RUNNING",
+					r"{bench_name}-workers:{bench_name}-hera-short-worker-0[\s]+RUNNING",
+					r"{bench_name}-workers:{bench_name}-hera-long-worker-0[\s]+RUNNING",
 				]
 			)
 
 		else:
 			tests.extend(
 				[
-					r"{bench_name}-workers:{bench_name}-frappe-workerbeat[\s]+RUNNING",
-					r"{bench_name}-workers:{bench_name}-frappe-worker[\s]+RUNNING",
-					r"{bench_name}-workers:{bench_name}-frappe-longjob-worker[\s]+RUNNING",
-					r"{bench_name}-workers:{bench_name}-frappe-async-worker[\s]+RUNNING",
+					r"{bench_name}-workers:{bench_name}-hera-workerbeat[\s]+RUNNING",
+					r"{bench_name}-workers:{bench_name}-hera-worker[\s]+RUNNING",
+					r"{bench_name}-workers:{bench_name}-hera-longjob-worker[\s]+RUNNING",
+					r"{bench_name}-workers:{bench_name}-hera-async-worker[\s]+RUNNING",
 				]
 			)
 

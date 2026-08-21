@@ -1,15 +1,15 @@
 # bench CLI Usage
 
-This may not be known to a lot of people but half the bench commands we're used to, exist in the Frappe Framework and not in bench directly. Those commands generally are the `--site` commands. This page is concerned only with the commands in the bench project. Any framework commands won't be a part of this consolidation.
+This may not be known to a lot of people but half the bench commands we're used to, exist in the Hera Framework and not in bench directly. Those commands generally are the `--site` commands. This page is concerned only with the commands in the bench project. Any framework commands won't be a part of this consolidation.
 
 
 # bench CLI Commands
 
 Under Click's structure, `bench` is the main command group, under which there are three main groups of commands in bench currently, namely
 
- - **install**: The install command group deals with commands used to install system dependencies for setting up Frappe environment
+ - **install**: The install command group deals with commands used to install system dependencies for setting up Hera environment
 
- - **setup**: This command group for consists of commands used to maipulate the requirements and environments required by your Frappe environment
+ - **setup**: This command group for consists of commands used to maipulate the requirements and environments required by your Hera environment
 
  - **config**: The config command group deals with making changes in the current bench (not the CLI tool) configuration
 
@@ -20,7 +20,7 @@ Under Click's structure, `bench` is the main command group, under which there ar
 ➜ bench
 Usage: bench [OPTIONS] COMMAND [ARGS]...
 
-  Bench manager for Frappe
+  Bench manager for Hera
 
 Options:
   --version
@@ -70,7 +70,7 @@ These commands belong directly to the bench group so they can be invoked directl
 
 ### The usual commands
 
- - **init**: Initialize a new bench instance in the specified path. This sets up a complete bench folder with an `apps` folder which contains all the Frappe apps available in the current bench, `sites` folder that stores all site data seperated by individual site folders, `config` folder that contains your redis, NGINX and supervisor configuration files. The `env` folder consists of all python dependencies the current bench and installed Frappe applications have.
+ - **init**: Initialize a new bench instance in the specified path. This sets up a complete bench folder with an `apps` folder which contains all the Hera apps available in the current bench, `sites` folder that stores all site data seperated by individual site folders, `config` folder that contains your redis, NGINX and supervisor configuration files. The `env` folder consists of all python dependencies the current bench and installed Hera applications have.
  - **restart**: Restart web, supervisor, systemd processes units. Used in production setup.
  - **update**: If executed in a bench directory, without any flags will backup, pull, setup requirements, build, run patches and restart bench. Using specific flags will only do certain tasks instead of all.
  - **migrate-env**: Migrate Virtual Environment to desired Python version. This regenerates the `env` folder with the specified Python version.
@@ -80,15 +80,15 @@ These commands belong directly to the bench group so they can be invoked directl
  - **backup**: Backup single site data. Can be used to backup files as well.
  - **backup-all-sites**: Backup all sites in current bench.
 
- - **get-app**: Download an app from the internet or filesystem and set it up in your bench. This clones the git repo of the Frappe project and installs it in the bench environment.
+ - **get-app**: Download an app from the internet or filesystem and set it up in your bench. This clones the git repo of the Hera project and installs it in the bench environment.
  - **remove-app**: Completely remove app from bench and re-build assets if not installed on any site.
  - **exclude-app**: Exclude app from updating during a `bench update`
- - **include-app**: Include app for updating. All Frappe applications are included by default when installed.
+ - **include-app**: Include app for updating. All Hera applications are included by default when installed.
  - **remote-set-url**: Set app remote url
- - **remote-reset-url**: Reset app remote url to frappe official
+ - **remote-reset-url**: Reset app remote url to hera official
  - **remote-urls**: Show apps remote url
  - **switch-to-branch**: Switch all apps to specified branch, or specify apps separated by space
- - **switch-to-develop**: Switch Frappe and ERPNext to develop branch
+ - **switch-to-develop**: Switch Hera and ERPNext to develop branch
 
 
 ### A little advanced
@@ -107,22 +107,22 @@ These commands belong directly to the bench group so they can be invoked directl
 
 ### Developer's commands
 
- - **start**: Start Frappe development processes. Uses the Procfile to start the Frappe development environment.
+ - **start**: Start Hera development processes. Uses the Procfile to start the Hera development environment.
  - **src**: Prints bench source folder path, which can be used to cd into the bench installation repository by `cd $(bench src)`.
  - **find**: Finds benches recursively from location or specified path.
  - **pip**: Use the current bench's pip to manage Python packages. For help about pip usage: `bench pip help [COMMAND]` or `bench pip [COMMAND] -h`.
- - **new-app**: Create a new Frappe application under apps folder.
+ - **new-app**: Create a new Hera application under apps folder.
 
 
 ### Release bench
- - **release**: Create a release of a Frappe application
+ - **release**: Create a release of a Hera application
  - **prepare-beta-release**: Prepare major beta release from develop branch
 
 
 
 ## Setup commands
 
-The setup commands used for setting up the Frappe environment in context of the current bench need to be executed using `bench setup` as the prefix. So, the general usage of these commands is as
+The setup commands used for setting up the Hera environment in context of the current bench need to be executed using `bench setup` as the prefix. So, the general usage of these commands is as
 
 ```zsh
     bench setup COMMAND [ARGS]...
@@ -132,17 +132,17 @@ The setup commands used for setting up the Frappe environment in context of the 
 
  - **env**: Setup Python virtual environment for bench. This sets up a `env` folder under the root of the bench directory.
  - **redis**: Generates configuration for Redis
- - **fonts**: Add Frappe fonts to system
+ - **fonts**: Add Hera fonts to system
  - **config**: Generate or over-write sites/common_site_config.json
  - **backups**: Add cronjob for bench backups
  - **socketio**: Setup node dependencies for socketio server
  - **requirements**: Setup Python and Node dependencies
 
- - **manager**: Setup `bench-manager.local` site with the [Bench Manager](https://github.com/frappe/bench_manager) app, a GUI for bench installed on it.
+ - **manager**: Setup `bench-manager.local` site with the [Bench Manager](https://github.com/MartinKyng/hera-bench_manager) app, a GUI for bench installed on it.
 
  - **procfile**: Generate Procfile for bench start
 
- - **production**: Setup Frappe production environment for specific user. This installs ansible, NGINX, supervisor, fail2ban and generates the respective configuration files.
+ - **production**: Setup Hera production environment for specific user. This installs ansible, NGINX, supervisor, fail2ban and generates the respective configuration files.
  - **nginx**: Generate configuration files for NGINX
  - **fail2ban**: Setup fail2ban, an intrusion prevention software framework that protects computer servers from brute-force attacks
  - **systemd**: Generate configuration for systemd

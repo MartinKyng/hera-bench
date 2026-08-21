@@ -7,9 +7,9 @@ import click
 
 
 def _python_backend_supported(python: str) -> bool:
-	"""Check the frappe env actually ships the python realtime server.
+	"""Check the hera env actually ships the python realtime server.
 
-	Probes with the frappe venv interpreter (not bench's) and uses find_spec
+	Probes with the hera venv interpreter (not bench's) and uses find_spec
 	so the module's heavy import side-effects (gevent monkey-patching) don't run.
 	"""
 	if not os.path.exists(python):
@@ -21,7 +21,7 @@ def _python_backend_supported(python: str) -> bool:
 					python,
 					"-c",
 					"import importlib.util, sys;"
-					"sys.exit(0 if importlib.util.find_spec('frappe.realtime.server') else 1)",
+					"sys.exit(0 if importlib.util.find_spec('hera.realtime.server') else 1)",
 				],
 				timeout=30,
 			).returncode
@@ -58,10 +58,10 @@ def socketio():
 		if _python_backend_supported(python):
 			# replace this process so the manager (supervisor/systemd/honcho)
 			# tracks the real server pid
-			os.execv(python, [python, "-m", "frappe.realtime.server"])
+			os.execv(python, [python, "-m", "hera.realtime.server"])
 		click.secho(
-			"socketio_backend is 'python' but this frappe env has no"
-			" 'frappe.realtime.server'; falling back to the node backend.",
+			"socketio_backend is 'python' but this hera env has no"
+			" 'hera.realtime.server'; falling back to the node backend.",
 			fg="yellow",
 		)
 
@@ -69,7 +69,7 @@ def socketio():
 	if not node:
 		raise click.ClickException(
 			"Cannot start socketio: node not found and the python backend is"
-			" unavailable. Install node or a frappe version with"
-			" frappe.realtime.server."
+			" unavailable. Install node or a hera version with"
+			" hera.realtime.server."
 		)
-	os.execv(node, [node, os.path.join("apps", "frappe", "socketio.js")])
+	os.execv(node, [node, os.path.join("apps", "hera", "socketio.js")])

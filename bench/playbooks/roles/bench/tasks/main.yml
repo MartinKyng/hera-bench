@@ -33,16 +33,16 @@
 
   - name: Fix permissions
     become_user: root
-    command: chown {{ frappe_user }} -R {{ user_directory }}
+    command: chown {{ hera_user }} -R {{ user_directory }}
 
   - name:  python3 bench init for develop
-    command: bench init {{ bench_path }} --frappe-path {{ frappe_repo_url }} --frappe-branch {{ frappe_branch }} --python {{ python }}
+    command: bench init {{ bench_path }} --hera-path {{ hera_repo_url }} --hera-branch {{ hera_branch }} --python {{ python }}
     args:
       creates: "{{ bench_path }}"
     when: not bench_stat.stat.exists and not production
 
   - name: python3 bench init for production
-    command: bench init {{ bench_path }} --frappe-path {{ frappe_repo_url }} --frappe-branch {{ frappe_branch }} --python {{ python }}
+    command: bench init {{ bench_path }} --hera-path {{ hera_repo_url }} --hera-branch {{ hera_branch }} --python {{ python }}
     args:
       creates: "{{ bench_path }}"
     when: not bench_stat.stat.exists and production

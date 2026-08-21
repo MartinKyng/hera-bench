@@ -9,20 +9,20 @@ from bench.commands.completion_utils import (
 	looks_like_path_option,
 	param_expects_path,
 )
-from bench.utils import find_parent_bench, get_cmd_output, get_env_frappe_commands
+from bench.utils import find_parent_bench, get_cmd_output, get_env_hera_commands
 from bench.utils.bench import get_env_cmd
 
 
 ROOT_KEY = "__root__"
-FRAPPE_KEY = "__frappe__"
-MAX_FRAPPE_DEPTH = 4
+HERA_KEY = "__hera__"
+MAX_HERA_DEPTH = 4
 FORWARDED_FLAGS = ["--verbose", "-v", "--profile", "--force"]
 FORWARDED_VALUE_OPTIONS = ["--site", "-s"]
 
-# Path to the collector script that runs inside the frappe virtualenv.
+# Path to the collector script that runs inside the hera virtualenv.
 # Kept as a separate file so it gets syntax highlighting, linting, and can be
 # run or inspected directly without extracting it from a string constant.
-_FRAPPE_SPEC_COLLECTOR = Path(__file__).parent / "frappe_spec_collector.py"
+_HERA_SPEC_COLLECTOR = Path(__file__).parent / "hera_spec_collector.py"
 
 
 @click.command(
@@ -134,17 +134,17 @@ def build_completion_spec(root_command: click.Command, verbose: bool = True) -> 
 	)
 
 	bench_path = find_parent_bench(os.path.abspath("."))
-	frappe_commands = []
+	hera_commands = []
 	if bench_path:
-		frappe_commands = _unique(get_env_frappe_commands(bench_path))
-		_collect_frappe_tree(
+		hera_commands = _unique(get_env_hera_commands(bench_path))
+		_collect_hera_tree(
 			bench_path,
 			subcommands,
 			options,
 			value_options,
 			path_options,
 			path_positionals,
-			frappe_commands,
+			hera_commands,
 			verbose=verbose,
 		)
 
@@ -154,11 +154,11 @@ def build_completion_spec(root_command: click.Command, verbose: bool = True) -> 
 		"value_options": value_options,
 		"path_options": path_options,
 		"path_positionals": path_positionals,
-		"frappe_commands": frappe_commands,
+		"hera_commands": hera_commands,
 	}
 
 
-def _get_frappe_spec_batch(bench_path, verbose: bool = True) -> dict | None:
+def _get_hera_spec_batch(bench_path, verbose: bool = True) -> dict | None:
 	import json
 	import subprocess
 
@@ -166,11 +166,11 @@ def _get_frappe_spec_batch(bench_path, verbose: bool = True) -> dict | None:
 	sites_path = os.path.join(bench_path, "sites")
 
 	if verbose:
-		click.echo("Collecting frappe completion data...", err=True)
+		click.echo("Collecting hera completion data...", err=True)
 
 	try:
 		proc = subprocess.run(
-			[python, str(_FRAPPE_SPEC_COLLECTOR)],
+			[python, str(_HERA_SPEC_COLLECTOR)],
 			cwd=sites_path,
 			stdout=subprocess.PIPE,
 			stderr=None if verbose else subprocess.DEVNULL,
@@ -183,7 +183,7 @@ def _get_frappe_spec_batch(bench_path, verbose: bool = True) -> dict | None:
 		return None
 
 
-def _collect_frappe_tree(
+def _collect_hera_tree(
 	bench_path,
 	subcommands,
 	options,
@@ -193,22 +193,22 @@ def _collect_frappe_tree(
 	fallback_commands,
 	verbose: bool = True,
 ):
-	spec = _get_frappe_spec_batch(bench_path, verbose=verbose)
+	spec = _get_hera_spec_batch(bench_path, verbose=verbose)
 
 	if spec is not None:
-		if FRAPPE_KEY in spec and fallback_commands:
-			spec[FRAPPE_KEY]["commands"] = _unique(
-				[*spec[FRAPPE_KEY]["commands"], *fallback_commands]
+		if HERA_KEY in spec and fallback_commands:
+			spec[HERA_KEY]["commands"] = _unique(
+				[*spec[HERA_KEY]["commands"], *fallback_commands]
 			)
-		_apply_frappe_completion_spec(
+		_apply_hera_completion_spec(
 			spec, subcommands, options, value_options, path_options, path_positionals
 		)
 		return
 
-	# get_app_groups() isn't available on older frappe versions, so fall back to
+	# get_app_groups() isn't available on older hera versions, so fall back to
 	# spawning one --help subprocess per command, parallelised across each BFS level.
-	spec = _build_frappe_tree_bfs_spec(bench_path, fallback_commands)
-	_apply_frappe_completion_spec(
+	spec = _build_hera_tree_bfs_spec(bench_path, fallback_commands)
+	_apply_hera_completion_spec(
 		spec,
 		subcommands,
 		options,
@@ -218,7 +218,7 @@ def _collect_frappe_tree(
 	)
 
 
-def _apply_frappe_completion_spec(
+def _apply_hera_completion_spec(
 	spec, subcommands, options, value_options, path_options, path_positionals
 ):
 	for key, entry in spec.items():
@@ -229,7 +229,7 @@ def _apply_frappe_completion_spec(
 		path_positionals[key] = entry.get("path_positionals", [])
 
 
-def _build_frappe_tree_bfs_spec(bench_path, fallback_commands):
+def _build_hera_tree_bfs_spec(bench_path, fallback_commands):
 	from concurrent.futures import ThreadPoolExecutor
 
 	seen = set()
@@ -238,30 +238,30 @@ def _build_frappe_tree_bfs_spec(bench_path, fallback_commands):
 
 	with ThreadPoolExecutor() as executor:
 		while pending:
-			pending = _collect_frappe_bfs_level(
+			pending = _collect_hera_bfs_level(
 				executor, bench_path, pending, seen, spec, fallback_commands
 			)
 
 	return spec
 
 
-def _collect_frappe_bfs_level(
+def _collect_hera_bfs_level(
 	executor, bench_path, pending, seen, spec, fallback_commands
 ):
-	paths = _unseen_frappe_paths(pending, seen)
+	paths = _unseen_hera_paths(pending, seen)
 	if not paths:
 		return []
 
 	futures = {
-		executor.submit(_get_frappe_help_text, bench_path, path): path for path in paths
+		executor.submit(_get_hera_help_text, bench_path, path): path for path in paths
 	}
-	return _consume_frappe_help_futures(futures, spec, fallback_commands)
+	return _consume_hera_help_futures(futures, spec, fallback_commands)
 
 
-def _unseen_frappe_paths(pending, seen):
+def _unseen_hera_paths(pending, seen):
 	paths = []
 	for path in pending:
-		key = _path_key((FRAPPE_KEY, *path))
+		key = _path_key((HERA_KEY, *path))
 		if key in seen:
 			continue
 		seen.add(key)
@@ -269,33 +269,33 @@ def _unseen_frappe_paths(pending, seen):
 	return paths
 
 
-def _consume_frappe_help_futures(futures, spec, fallback_commands):
+def _consume_hera_help_futures(futures, spec, fallback_commands):
 	from concurrent.futures import as_completed
 
 	next_pending = []
 	for future in as_completed(futures):
 		path = futures[future]
 		next_pending.extend(
-			_record_frappe_spec_entry(path, future.result(), spec, fallback_commands)
+			_record_hera_spec_entry(path, future.result(), spec, fallback_commands)
 		)
 	return next_pending
 
 
-def _record_frappe_spec_entry(path, help_text, spec, fallback_commands):
+def _record_hera_spec_entry(path, help_text, spec, fallback_commands):
 	parsed = _parse_click_help(help_text)
-	children = _frappe_children(path, parsed["commands"], fallback_commands)
-	key = _path_key((FRAPPE_KEY, *path))
-	spec[key] = _frappe_spec_entry(parsed, children)
-	return _child_frappe_paths(path, children)
+	children = _hera_children(path, parsed["commands"], fallback_commands)
+	key = _path_key((HERA_KEY, *path))
+	spec[key] = _hera_spec_entry(parsed, children)
+	return _child_hera_paths(path, children)
 
 
-def _frappe_children(path, commands, fallback_commands):
+def _hera_children(path, commands, fallback_commands):
 	if path or not fallback_commands:
 		return commands
 	return _unique([*commands, *fallback_commands])
 
 
-def _frappe_spec_entry(parsed, children):
+def _hera_spec_entry(parsed, children):
 	value_options = _unique(parsed["value_options"])
 	return {
 		"commands": _unique(children),
@@ -308,17 +308,17 @@ def _frappe_spec_entry(parsed, children):
 	}
 
 
-def _child_frappe_paths(path, children):
-	if len(path) >= MAX_FRAPPE_DEPTH:
+def _child_hera_paths(path, children):
+	if len(path) >= MAX_HERA_DEPTH:
 		return []
 	return [(*path, child) for child in children]
 
 
-def _get_frappe_help_text(bench_path, path) -> str:
+def _get_hera_help_text(bench_path, path) -> str:
 	python = get_env_cmd("python", bench_path=bench_path)
 	sites_path = os.path.join(bench_path, "sites")
 	args = " ".join(shlex.quote(part) for part in path)
-	cmd = f"{python} -m frappe.utils.bench_helper frappe"
+	cmd = f"{python} -m hera.utils.bench_helper hera"
 	if args:
 		cmd = f"{cmd} {args}"
 	cmd = f"{cmd} --help"
@@ -556,8 +556,8 @@ def render_zsh_completion(spec: dict) -> str:
 def _render_spec_constants(spec: dict) -> list[str]:
 	return [
 		f"_BENCH_ROOT_KEY={shlex.quote(ROOT_KEY)}",
-		f"_BENCH_FRAPPE_KEY={shlex.quote(FRAPPE_KEY)}",
-		f"_BENCH_FRAPPE_COMMANDS={shlex.quote(' '.join(spec['frappe_commands']))}",
+		f"_BENCH_HERA_KEY={shlex.quote(HERA_KEY)}",
+		f"_BENCH_HERA_COMMANDS={shlex.quote(' '.join(spec['hera_commands']))}",
 		f"_BENCH_FORWARDED_FLAGS={shlex.quote(' '.join(FORWARDED_FLAGS))}",
 		f"_BENCH_FORWARDED_VALUE_OPTIONS={shlex.quote(' '.join(FORWARDED_VALUE_OPTIONS))}",
 	]
@@ -675,7 +675,7 @@ _bench_collect_completion_state() {
 		fi
 
 		value_opts="$(_bench_value_options_for "$ctx")"
-		if [[ "$ctx" == "$_BENCH_ROOT_KEY" || "$ctx" == "$_BENCH_FRAPPE_KEY" || "$ctx" == "$_BENCH_FRAPPE_KEY "* ]]; then
+		if [[ "$ctx" == "$_BENCH_ROOT_KEY" || "$ctx" == "$_BENCH_HERA_KEY" || "$ctx" == "$_BENCH_HERA_KEY "* ]]; then
 			value_opts="$value_opts $_BENCH_FORWARDED_VALUE_OPTIONS"
 		fi
 
@@ -695,8 +695,8 @@ _bench_collect_completion_state() {
 			continue
 		fi
 
-		if [[ "$ctx" == "$_BENCH_ROOT_KEY" ]] && _bench_has_word "$token" "$_BENCH_FRAPPE_COMMANDS"; then
-			ctx="$(_bench_join_path "$_BENCH_FRAPPE_KEY" "$token")"
+		if [[ "$ctx" == "$_BENCH_ROOT_KEY" ]] && _bench_has_word "$token" "$_BENCH_HERA_COMMANDS"; then
+			ctx="$(_bench_join_path "$_BENCH_HERA_KEY" "$token")"
 			positional_index=0
 			continue
 		fi
@@ -849,7 +849,7 @@ _bench_collect_completion_state() {
 		fi
 
 		value_opts=(${(z)"$(_bench_value_options_for "$ctx")"})
-		if [[ $ctx == $_BENCH_ROOT_KEY || $ctx == $_BENCH_FRAPPE_KEY || $ctx == $_BENCH_FRAPPE_KEY\ * ]]; then
+		if [[ $ctx == $_BENCH_ROOT_KEY || $ctx == $_BENCH_HERA_KEY || $ctx == $_BENCH_HERA_KEY\ * ]]; then
 			value_opts+=(${(z)_BENCH_FORWARDED_VALUE_OPTIONS})
 		fi
 
@@ -869,8 +869,8 @@ _bench_collect_completion_state() {
 			continue
 		fi
 
-		if [[ $ctx == $_BENCH_ROOT_KEY ]] && _bench_has_word $token ${(z)_BENCH_FRAPPE_COMMANDS}; then
-			ctx=$(_bench_join_path "$_BENCH_FRAPPE_KEY" "$token")
+		if [[ $ctx == $_BENCH_ROOT_KEY ]] && _bench_has_word $token ${(z)_BENCH_HERA_COMMANDS}; then
+			ctx=$(_bench_join_path "$_BENCH_HERA_KEY" "$token")
 			positional_index=0
 			continue
 		fi
@@ -922,10 +922,10 @@ _bench() {
 	subcommands=(${(z)"$(_bench_subcommands_for "$ctx")"})
 
 	if [[ $ctx == $_BENCH_ROOT_KEY ]]; then
-		subcommands+=(${(z)_BENCH_FRAPPE_COMMANDS})
+		subcommands+=(${(z)_BENCH_HERA_COMMANDS})
 		options+=(${(z)_BENCH_FORWARDED_FLAGS})
 		options+=(${(z)_BENCH_FORWARDED_VALUE_OPTIONS})
-	elif [[ $ctx == $_BENCH_FRAPPE_KEY || $ctx == $_BENCH_FRAPPE_KEY\ * ]]; then
+	elif [[ $ctx == $_BENCH_HERA_KEY || $ctx == $_BENCH_HERA_KEY\ * ]]; then
 		options+=(${(z)_BENCH_FORWARDED_FLAGS})
 		options+=(${(z)_BENCH_FORWARDED_VALUE_OPTIONS})
 	fi
@@ -996,9 +996,9 @@ _BASH_RUNTIME_SUFFIX = r"""_bench_completion() {
 	subcommands="$(_bench_subcommands_for "$ctx")"
 
 	if [[ "$ctx" == "$_BENCH_ROOT_KEY" ]]; then
-		subcommands="$subcommands $_BENCH_FRAPPE_COMMANDS"
+		subcommands="$subcommands $_BENCH_HERA_COMMANDS"
 		options="$options $_BENCH_FORWARDED_FLAGS $_BENCH_FORWARDED_VALUE_OPTIONS"
-	elif [[ "$ctx" == "$_BENCH_FRAPPE_KEY" || "$ctx" == "$_BENCH_FRAPPE_KEY "* ]]; then
+	elif [[ "$ctx" == "$_BENCH_HERA_KEY" || "$ctx" == "$_BENCH_HERA_KEY "* ]]; then
 		options="$options $_BENCH_FORWARDED_FLAGS $_BENCH_FORWARDED_VALUE_OPTIONS"
 	fi
 

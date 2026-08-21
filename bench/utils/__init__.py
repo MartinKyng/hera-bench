@@ -33,7 +33,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger(PROJECT_NAME)
 paths_in_app = ("hooks.py", "modules.txt", "patches.txt")
 paths_in_bench = ("apps", "sites", "config", "logs", "config/pids")
-sudoers_file = "/etc/sudoers.d/frappe"
+sudoers_file = "/etc/sudoers.d/hera"
 UNSET_ARG = object()
 
 
@@ -59,17 +59,17 @@ def is_bench_directory(directory=os.path.curdir):
 	return is_bench
 
 
-def is_frappe_app(directory: str) -> bool:
-	is_frappe_app = True
+def is_hera_app(directory: str) -> bool:
+	is_hera_app = True
 
 	for folder in paths_in_app:
-		if not is_frappe_app:
+		if not is_hera_app:
 			break
 
 		path = glob(os.path.join(directory, "**", folder))
-		is_frappe_app = is_frappe_app and path
+		is_hera_app = is_hera_app and path
 
-	return bool(is_frappe_app)
+	return bool(is_hera_app)
 
 
 def get_bench_cache_path(sub_dir: Optional[str]) -> Path:
@@ -84,15 +84,15 @@ def get_bench_cache_path(sub_dir: Optional[str]) -> Path:
 
 
 @lru_cache(maxsize=None)
-def is_valid_frappe_branch(frappe_path: str, frappe_branch: str):
+def is_valid_hera_branch(hera_path: str, hera_branch: str):
 	"""Check if a branch exists in a repo. Throws InvalidRemoteException if branch is not found
 
 	Uses native git command to check for branches on a remote.
 
-	:param frappe_path: git url
-	:type frappe_path: str
-	:param frappe_branch: branch to check
-	:type frappe_branch: str
+	:param hera_path: git url
+	:type hera_path: str
+	:param hera_branch: branch to check
+	:type hera_branch: str
 	:raises InvalidRemoteException: branch for this repo doesn't exist
 	"""
 	from git.cmd import Git
@@ -100,15 +100,15 @@ def is_valid_frappe_branch(frappe_path: str, frappe_branch: str):
 
 	g = Git()
 
-	if frappe_branch:
+	if hera_branch:
 		try:
-			res = g.ls_remote("--heads", "--tags", frappe_path, frappe_branch)
+			res = g.ls_remote("--heads", "--tags", hera_path, hera_branch)
 			if not res:
 				raise InvalidRemoteException(
-					f"Invalid branch or tag: {frappe_branch} for the remote {frappe_path}"
+					f"Invalid branch or tag: {hera_branch} for the remote {hera_path}"
 				)
 		except GitCommandError as e:
-			raise InvalidRemoteException(f"Invalid frappe path: {frappe_path}") from e
+			raise InvalidRemoteException(f"Invalid hera path: {hera_path}") from e
 
 
 def log(message, level=0, no_log=False, stderr=False):
@@ -141,14 +141,14 @@ def check_latest_version():
 	if VERSION.endswith("dev"):
 		return
 
-	if os.environ.get("FRAPPE_DOCKER_BUILD"):
+	if os.environ.get("HERA_DOCKER_BUILD"):
 		return
 
 	import requests
 	from semantic_version import Version
 
 	try:
-		pypi_request = requests.get("https://pypi.org/pypi/frappe-bench/json")
+		pypi_request = requests.get("https://pypi.org/pypi/hera-bench/json")
 	except Exception:
 		# Exceptions thrown are defined in requests.exceptions
 		# ignore checking on all Exceptions
@@ -274,7 +274,7 @@ def is_root():
 	return os.getuid() == 0
 
 
-def run_frappe_cmd(*args, **kwargs):
+def run_hera_cmd(*args, **kwargs):
 	from bench.cli import from_command_line
 	from bench.utils.bench import get_env_cmd
 
@@ -289,7 +289,7 @@ def run_frappe_cmd(*args, **kwargs):
 		stderr = stdout = None
 
 	p = subprocess.Popen(
-		(f, "-m", "frappe.utils.bench_helper", "frappe") + args,
+		(f, "-m", "hera.utils.bench_helper", "hera") + args,
 		cwd=sites_dir,
 		stdout=stdout,
 		stderr=stderr,
@@ -428,8 +428,8 @@ def find_parent_bench(path: str) -> str:
 		return find_parent_bench(parent_dir)
 
 
-def get_env_frappe_commands(bench_path=".") -> List:
-	"""Caches all available commands (even custom apps) via Frappe
+def get_env_hera_commands(bench_path=".") -> List:
+	"""Caches all available commands (even custom apps) via Hera
 	Default caching behaviour: generated the first time any command (for a specific bench directory)
 	"""
 	from bench.utils.bench import get_env_cmd
@@ -440,7 +440,7 @@ def get_env_frappe_commands(bench_path=".") -> List:
 	try:
 		return json.loads(
 			get_cmd_output(
-				f"{python} -m frappe.utils.bench_helper get-frappe-commands", cwd=sites_path
+				f"{python} -m hera.utils.bench_helper get-hera-commands", cwd=sites_path
 			)
 		)
 
@@ -456,7 +456,7 @@ def find_org(org_repo, using_cached: bool = False):
 
 	org_repo = org_repo[0]
 
-	for org in ["frappe", "erpnext"]:
+	for org in ["MartinKyng"]:
 		res = requests.head(f"https://api.github.com/repos/{org}/{org_repo}")
 		if res.status_code in (400, 403):
 			res = requests.head(f"https://github.com/{org}/{org_repo}")
@@ -467,7 +467,7 @@ def find_org(org_repo, using_cached: bool = False):
 		return "", org_repo
 
 	raise InvalidRemoteException(
-		f"{org_repo} not found under frappe or erpnext GitHub accounts"
+		f"{org_repo} not found under the MartinKyng GitHub account"
 	)
 
 
@@ -549,10 +549,10 @@ def get_traceback() -> str:
 class _dict(dict):
 	"""dict like object that exposes keys as attributes"""
 
-	# bench port of frappe._dict
+	# bench port of hera._dict
 	def __getattr__(self, key):
 		ret = self.get(key)
-		# "__deepcopy__" exception added to fix frappe#14833 via DFP
+		# "__deepcopy__" exception added for upstream framework issue #14833 via DFP
 		if not ret and key.startswith("__") and key != "__deepcopy__":
 			raise AttributeError()
 		return ret
@@ -578,15 +578,15 @@ class _dict(dict):
 def get_cmd_from_sysargv():
 	"""Identify and segregate tokens to options and command
 
-	For Command: `bench --profile --site frappeframework.com migrate --no-backup`
-	sys.argv: ["/home/frappe/.local/bin/bench", "--profile", "--site", "frappeframework.com", "migrate", "--no-backup"]
+	For Command: `bench --profile --site hera.example.com migrate --no-backup`
+	sys.argv: ["/home/hera/.local/bin/bench", "--profile", "--site", "hera.example.com", "migrate", "--no-backup"]
 	Actual command run: migrate
 
 	"""
-	# context is passed as options to frappe's bench_helper
+	# context is passed as options to hera's bench_helper
 	from bench.bench import Bench
 
-	frappe_context = _dict(params={"--site"}, flags={"--verbose", "--profile", "--force"})
+	hera_context = _dict(params={"--site"}, flags={"--verbose", "--profile", "--force"})
 	cmd_from_ctx = None
 	sys_argv = sys.argv[1:]
 	skip_next = False
@@ -596,10 +596,10 @@ def get_cmd_from_sysargv():
 			skip_next = False
 			continue
 
-		if arg in frappe_context.flags:
+		if arg in hera_context.flags:
 			continue
 
-		elif arg in frappe_context.params:
+		elif arg in hera_context.params:
 			skip_next = True
 			continue
 
@@ -642,7 +642,7 @@ def get_app_cache_extract_filter(
 		try:
 			return data_filter(member, dest_path)
 		except AbsoluteLinkError:
-			# Links created by `frappe` after extraction
+			# Links created by `hera` after extraction
 			return None
 
 	return filter_function

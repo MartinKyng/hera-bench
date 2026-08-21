@@ -41,9 +41,9 @@ def _run_zsh_completion(
 	)
 
 
-def _frappe_root_help(commands: list[str]) -> str:
+def _hera_root_help(commands: list[str]) -> str:
 	return (
-		"Usage: frappe [OPTIONS] COMMAND [ARGS]...\n\n"
+		"Usage: hera [OPTIONS] COMMAND [ARGS]...\n\n"
 		"Options:\n"
 		"  --site TEXT\n"
 		"  --help      Show this message and exit.\n\n"
@@ -51,31 +51,31 @@ def _frappe_root_help(commands: list[str]) -> str:
 	)
 
 
-def _frappe_command_help(command: str, usage: str = "[OPTIONS]", options=()) -> str:
+def _hera_command_help(command: str, usage: str = "[OPTIONS]", options=()) -> str:
 	return (
-		f"Usage: frappe {command} {usage}\n\n"
+		f"Usage: hera {command} {usage}\n\n"
 		"Options:\n"
 		+ "".join(f"  {option}\n" for option in options)
 		+ "  --help              Show this message and exit.\n"
 	)
 
 
-def _fake_frappe_help(
+def _fake_hera_help(
 	commands: list[str], help_by_command: dict[str, str] | None = None
 ):
 	help_by_command = help_by_command or {}
 
 	def fake_help(cmd, cwd=".", _raise=True):
 		for command, help_text in help_by_command.items():
-			if f"frappe {command} --help" in cmd:
+			if f"hera {command} --help" in cmd:
 				return help_text
-		return _frappe_root_help(commands)
+		return _hera_root_help(commands)
 
 	return fake_help
 
 
 @contextmanager
-def _mock_frappe_completion(
+def _mock_hera_completion(
 	commands: list[str], help_by_command: dict[str, str] | None = None
 ):
 	with tempfile.TemporaryDirectory() as bench_dir:
@@ -84,7 +84,7 @@ def _mock_frappe_completion(
 
 		with (
 			patch(
-				"bench.commands.completions.get_env_frappe_commands",
+				"bench.commands.completions.get_env_hera_commands",
 				return_value=commands,
 			),
 			patch(
@@ -93,22 +93,22 @@ def _mock_frappe_completion(
 			),
 			patch("bench.commands.completions.get_env_cmd", return_value="python"),
 			patch(
-				"bench.commands.completions._get_frappe_spec_batch", return_value=None
+				"bench.commands.completions._get_hera_spec_batch", return_value=None
 			),
 			patch(
 				"bench.commands.completions.get_cmd_output",
-				side_effect=_fake_frappe_help(commands, help_by_command),
+				side_effect=_fake_hera_help(commands, help_by_command),
 			),
 		):
 			yield bench_path
 
 
-def _generate_frappe_completion(
+def _generate_hera_completion(
 	shell: str,
 	commands: list[str],
 	help_by_command: dict[str, str] | None = None,
 ) -> str:
-	with _mock_frappe_completion(commands, help_by_command):
+	with _mock_hera_completion(commands, help_by_command):
 		return generate_completion(shell, bench_command)
 
 
@@ -168,27 +168,27 @@ class TestBenchCompletionGeneration(unittest.TestCase):
 		)
 		self.assertContainsNone(script, ["_BENCH_COMPLETE"])
 
-	def test_generation_embeds_current_frappe_commands(self):
-		script = _generate_frappe_completion(
+	def test_generation_embeds_current_hera_commands(self):
+		script = _generate_hera_completion(
 			"bash",
 			["migrate", "list-apps", "migrate"],
 			{
-				"migrate": _frappe_command_help(
+				"migrate": _hera_command_help(
 					"migrate",
 					options=["--skip-failing TEXT"],
 				),
-				"list-apps": _frappe_command_help(
+				"list-apps": _hera_command_help(
 					"list-apps",
 					options=["--format TEXT"],
 				),
 			},
 		)
 
-		self.assertIn("_BENCH_FRAPPE_COMMANDS='migrate list-apps'", script)
-		self.assertIn("__frappe__) printf '%s' 'migrate list-apps'", script)
-		self.assertIn("__frappe__) printf '%s' '--help --site'", script)
+		self.assertIn("_BENCH_HERA_COMMANDS='migrate list-apps'", script)
+		self.assertIn("__hera__) printf '%s' 'migrate list-apps'", script)
+		self.assertIn("__hera__) printf '%s' '--help --site'", script)
 		self.assertIn(
-			"'__frappe__ migrate') printf '%s' '--help --skip-failing'", script
+			"'__hera__ migrate') printf '%s' '--help --skip-failing'", script
 		)
 
 	def test_zsh_completion_uses_native_compdef(self):
@@ -239,7 +239,7 @@ class TestBenchCompletionGeneration(unittest.TestCase):
 
 		self.assertContainsAll(
 			script,
-			["init) printf '%s' 0", "--frappe-path", "--clone-from"],
+			["init) printf '%s' 0", "--hera-path", "--clone-from"],
 		)
 
 	def test_help_fallback_detects_path_options_and_positionals(self):
@@ -266,34 +266,34 @@ class TestBenchCompletionGeneration(unittest.TestCase):
 		self.assertTrue(looks_like_path_name("clone-from"))
 		self.assertFalse(looks_like_path_name("format"))
 
-	def test_frappe_restore_path_completion_via_help_fallback(self):
-		script = _generate_frappe_completion(
+	def test_hera_restore_path_completion_via_help_fallback(self):
+		script = _generate_hera_completion(
 			"bash",
 			["restore", "backup"],
 			{
-				"restore": _frappe_command_help(
+				"restore": _hera_command_help(
 					"restore",
 					"[OPTIONS] SQL-FILE-PATH",
 					["--with-public-files PATH", "--with-private-files PATH"],
 				),
-				"backup": _frappe_command_help(
+				"backup": _hera_command_help(
 					"backup",
 					options=["--backup-path PATH"],
 				),
 			},
 		)
 
-		self.assertIn("'__frappe__ restore') printf '%s' 0", script)
+		self.assertIn("'__hera__ restore') printf '%s' 0", script)
 		self.assertIn("--with-public-files", script)
 		self.assertIn("--with-private-files", script)
 		self.assertIn("--backup-path", script)
 
-	def test_runtime_resolves_frappe_subcommand_context(self):
-		with _mock_frappe_completion(["restore"]):
+	def test_runtime_resolves_hera_subcommand_context(self):
+		with _mock_hera_completion(["restore"]):
 			script = generate_completion("bash", bench_command)
 
 			self.assertIn(
-				'ctx="$(_bench_join_path "$_BENCH_FRAPPE_KEY" "$token")"',
+				'ctx="$(_bench_join_path "$_BENCH_HERA_KEY" "$token")"',
 				script,
 			)
 
@@ -303,13 +303,13 @@ class TestBenchCompletionGeneration(unittest.TestCase):
 				"_bench_collect_completion_state",
 			)
 
-		self.assertEqual(result.stdout.strip(), "__frappe__ restore|0")
+		self.assertEqual(result.stdout.strip(), "__hera__ restore|0")
 
 	def test_runtime_completes_files_for_restore(self):
-		with _mock_frappe_completion(
+		with _mock_hera_completion(
 			["restore"],
 			{
-				"restore": _frappe_command_help(
+				"restore": _hera_command_help(
 					"restore",
 					"[OPTIONS] SQL-FILE-PATH",
 					["--with-public-files PATH"],
@@ -330,9 +330,9 @@ class TestBenchCompletionGeneration(unittest.TestCase):
 		self.assertIn("marker-restore-test", result.stdout.splitlines())
 
 	def test_runtime_appends_slash_to_completed_directories(self):
-		with _mock_frappe_completion(
+		with _mock_hera_completion(
 			["restore"],
-			{"restore": _frappe_command_help("restore", "[OPTIONS] SQL-FILE-PATH")},
+			{"restore": _hera_command_help("restore", "[OPTIONS] SQL-FILE-PATH")},
 		) as bench_dir:
 			(bench_dir / "nested-dir").mkdir()
 			script = generate_completion("bash", bench_command)
@@ -349,9 +349,9 @@ class TestBenchCompletionGeneration(unittest.TestCase):
 		self.assertIn("nested-dir/", result.stdout.splitlines())
 
 	def test_runtime_completes_tilde_paths_after_forwarded_site(self):
-		with _mock_frappe_completion(
+		with _mock_hera_completion(
 			["restore"],
-			{"restore": _frappe_command_help("restore", "[OPTIONS] SQL-FILE-PATH")},
+			{"restore": _hera_command_help("restore", "[OPTIONS] SQL-FILE-PATH")},
 		) as bench_dir:
 			downloads = bench_dir / "downloads"
 			downloads.mkdir()
@@ -369,8 +369,8 @@ class TestBenchCompletionGeneration(unittest.TestCase):
 
 		self.assertIn("~/downloads/backup.sql.gz", result.stdout.splitlines())
 
-	def test_zsh_runtime_resolves_frappe_subcommand_context(self):
-		script = _generate_frappe_completion("zsh", ["restore"])
+	def test_zsh_runtime_resolves_hera_subcommand_context(self):
+		script = _generate_hera_completion("zsh", ["restore"])
 
 		with _temporary_completion_script(script, ".zsh") as script_path:
 			result = subprocess.run(
@@ -386,7 +386,7 @@ class TestBenchCompletionGeneration(unittest.TestCase):
 				text=True,
 			)
 
-		self.assertEqual(result.stdout.strip(), "__frappe__ restore|0")
+		self.assertEqual(result.stdout.strip(), "__hera__ restore|0")
 
 	def test_zsh_completion_handles_partial_command_without_error(self):
 		script = generate_completion("zsh", bench_command)
@@ -398,9 +398,9 @@ class TestBenchCompletionGeneration(unittest.TestCase):
 		self.assertEqual(result.returncode, 0)
 
 	def test_zsh_completion_uses_tilde_paths_after_forwarded_site(self):
-		with _mock_frappe_completion(
+		with _mock_hera_completion(
 			["restore"],
-			{"restore": _frappe_command_help("restore", "[OPTIONS] SQL-FILE-PATH")},
+			{"restore": _hera_command_help("restore", "[OPTIONS] SQL-FILE-PATH")},
 		) as bench_dir:
 			downloads = bench_dir / "downloads"
 			downloads.mkdir()

@@ -10,14 +10,14 @@ import git
 # imports - module imports
 from bench.utils import exec_cmd
 from bench.app import App
-from bench.tests.test_base import FRAPPE_BRANCH, TestBenchBase
+from bench.tests.test_base import HERA_BRANCH, TestBenchBase
 from bench.bench import Bench
 
 
-# changed from frappe_theme because it wasn't maintained and incompatible,
-# chat app & wiki was breaking too. hopefully frappe_docs will be maintained
+# changed from hera_theme because it wasn't maintained and incompatible,
+# chat app & wiki was breaking too. hopefully hera_docs will be maintained
 # for longer since docs.erpnext.com is powered by it ;)
-TEST_FRAPPE_APP = "frappe_docs"
+TEST_HERA_APP = "hera_docs"
 
 
 class TestBenchInit(TestBenchBase):
@@ -26,16 +26,16 @@ class TestBenchInit(TestBenchBase):
 
 	def test_init(self, bench_name="test-bench", **kwargs):
 		self.init_bench(bench_name, **kwargs)
-		app = App("file:///tmp/frappe")
+		app = App("file:///tmp/hera")
 		self.assertTupleEqual(
 			(app.mount_path, app.url, app.repo, app.app_name, app.org),
-			("/tmp/frappe", "file:///tmp/frappe", "frappe", "frappe", "frappe"),
+			("/tmp/hera", "file:///tmp/hera", "hera", "hera", "hera"),
 		)
 		self.assert_folders(bench_name)
 		self.assert_virtual_env(bench_name)
 		self.assert_config(bench_name)
 		test_bench = Bench(bench_name)
-		app = App("frappe", bench=test_bench)
+		app = App("hera", bench=test_bench)
 		self.assertEqual(app.from_apps, True)
 
 	def basic(self):
@@ -98,20 +98,20 @@ class TestBenchInit(TestBenchBase):
 	def test_get_app(self):
 		self.init_bench("test-bench", skip_assets=True)
 		bench_path = os.path.join(self.benches_path, "test-bench")
-		exec_cmd(f"bench get-app {TEST_FRAPPE_APP} --skip-assets", cwd=bench_path)
-		self.assertTrue(os.path.exists(os.path.join(bench_path, "apps", TEST_FRAPPE_APP)))
-		app_installed_in_env = TEST_FRAPPE_APP in subprocess.check_output(
+		exec_cmd(f"bench get-app {TEST_HERA_APP} --skip-assets", cwd=bench_path)
+		self.assertTrue(os.path.exists(os.path.join(bench_path, "apps", TEST_HERA_APP)))
+		app_installed_in_env = TEST_HERA_APP in subprocess.check_output(
 			["bench", "pip", "freeze"], cwd=bench_path
 		).decode("utf8")
 		self.assertTrue(app_installed_in_env)
 
-	@unittest.skipIf(FRAPPE_BRANCH != "develop", "only for develop branch")
+	@unittest.skipIf(HERA_BRANCH != "develop", "only for develop branch")
 	def test_get_app_resolve_deps(self):
-		FRAPPE_APP = "healthcare"
+		HERA_APP = "healthcare"
 		self.init_bench("test-bench", skip_assets=True)
 		bench_path = os.path.join(self.benches_path, "test-bench")
-		exec_cmd(f"bench get-app {FRAPPE_APP} --resolve-deps --skip-assets", cwd=bench_path)
-		self.assertTrue(os.path.exists(os.path.join(bench_path, "apps", FRAPPE_APP)))
+		exec_cmd(f"bench get-app {HERA_APP} --resolve-deps --skip-assets", cwd=bench_path)
+		self.assertTrue(os.path.exists(os.path.join(bench_path, "apps", HERA_APP)))
 
 		states_path = os.path.join(bench_path, "sites", "apps.json")
 		self.assertTrue(os.path.exists(states_path))
@@ -119,7 +119,7 @@ class TestBenchInit(TestBenchBase):
 		with open(states_path) as f:
 			states = json.load(f)
 
-		self.assertTrue(FRAPPE_APP in states)
+		self.assertTrue(HERA_APP in states)
 
 	def test_install_app_from_setup(self):
 		app_name = "test-app"
@@ -141,13 +141,13 @@ setup(name='{app_name}', version='0.1.0', packages=find_packages())
 
 		self.init_bench(bench_name, skip_assets=True)
 		exec_cmd(
-			f"bench get-app {TEST_FRAPPE_APP} --branch master --skip-assets", cwd=bench_path
+			f"bench get-app {TEST_HERA_APP} --branch master --skip-assets", cwd=bench_path
 		)
 
-		self.assertTrue(os.path.exists(os.path.join(bench_path, "apps", TEST_FRAPPE_APP)))
+		self.assertTrue(os.path.exists(os.path.join(bench_path, "apps", TEST_HERA_APP)))
 
 		# check if app is installed
-		app_installed_in_env = TEST_FRAPPE_APP in subprocess.check_output(
+		app_installed_in_env = TEST_HERA_APP in subprocess.check_output(
 			["bench", "pip", "freeze"], cwd=bench_path
 		).decode("utf8")
 		self.assertTrue(app_installed_in_env)
@@ -155,7 +155,7 @@ setup(name='{app_name}', version='0.1.0', packages=find_packages())
 		# create and install app on site
 		self.new_site(site_name, bench_name)
 		installed_app = not exec_cmd(
-			f"bench --site {site_name} install-app {TEST_FRAPPE_APP}",
+			f"bench --site {site_name} install-app {TEST_HERA_APP}",
 			cwd=bench_path,
 			_raise=False,
 		)
@@ -164,39 +164,39 @@ setup(name='{app_name}', version='0.1.0', packages=find_packages())
 			app_installed_on_site = subprocess.check_output(
 				["bench", "--site", site_name, "list-apps"], cwd=bench_path
 			).decode("utf8")
-			self.assertTrue(TEST_FRAPPE_APP in app_installed_on_site)
+			self.assertTrue(TEST_HERA_APP in app_installed_on_site)
 
 	def test_remove_app(self):
 		self.init_bench("test-bench", skip_assets=True)
 		bench_path = os.path.join(self.benches_path, "test-bench")
 
 		exec_cmd(
-			f"bench get-app {TEST_FRAPPE_APP} --branch master --overwrite --skip-assets",
+			f"bench get-app {TEST_HERA_APP} --branch master --overwrite --skip-assets",
 			cwd=bench_path,
 		)
-		exec_cmd(f"bench remove-app {TEST_FRAPPE_APP}", cwd=bench_path)
+		exec_cmd(f"bench remove-app {TEST_HERA_APP}", cwd=bench_path)
 
 		with open(os.path.join(bench_path, "sites", "apps.txt")) as f:
-			self.assertFalse(TEST_FRAPPE_APP in f.read())
+			self.assertFalse(TEST_HERA_APP in f.read())
 		self.assertFalse(
-			TEST_FRAPPE_APP
+			TEST_HERA_APP
 			in subprocess.check_output(["bench", "pip", "freeze"], cwd=bench_path).decode("utf8")
 		)
-		self.assertFalse(os.path.exists(os.path.join(bench_path, "apps", TEST_FRAPPE_APP)))
+		self.assertFalse(os.path.exists(os.path.join(bench_path, "apps", TEST_HERA_APP)))
 
 	def test_switch_to_branch(self):
 		self.init_bench("test-bench", skip_assets=True)
 		bench_path = os.path.join(self.benches_path, "test-bench")
-		app_path = os.path.join(bench_path, "apps", "frappe")
+		app_path = os.path.join(bench_path, "apps", "hera")
 
 		# * chore: change to 14 when avalible
 		prevoius_branch = "version-13"
-		if FRAPPE_BRANCH != "develop":
+		if HERA_BRANCH != "develop":
 			# assuming we follow `version-#`
-			prevoius_branch = f"version-{int(FRAPPE_BRANCH.split('-')[1]) - 1}"
+			prevoius_branch = f"version-{int(HERA_BRANCH.split('-')[1]) - 1}"
 
 		successful_switch = not exec_cmd(
-			f"bench switch-to-branch {prevoius_branch} frappe --upgrade",
+			f"bench switch-to-branch {prevoius_branch} hera --upgrade",
 			cwd=bench_path,
 			_raise=False,
 		)
@@ -205,13 +205,13 @@ setup(name='{app_name}', version='0.1.0', packages=find_packages())
 			self.assertEqual(prevoius_branch, app_branch_after_switch)
 
 		successful_switch = not exec_cmd(
-			f"bench switch-to-branch {FRAPPE_BRANCH} frappe --upgrade",
+			f"bench switch-to-branch {HERA_BRANCH} hera --upgrade",
 			cwd=bench_path,
 			_raise=False,
 		)
 		if successful_switch:
 			app_branch_after_second_switch = str(git.Repo(path=app_path).active_branch)
-			self.assertEqual(FRAPPE_BRANCH, app_branch_after_second_switch)
+			self.assertEqual(HERA_BRANCH, app_branch_after_second_switch)
 
 
 if __name__ == "__main__":

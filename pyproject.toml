@@ -38,10 +38,10 @@ dynamic = [
 bench = "bench.cli:cli"
 
 [project.urls]
-Changelog = "https://github.com/frappe/bench/releases"
-Documentation = "https://frappeframework.com/docs/user/en/bench"
-Homepage = "https://frappe.io/bench"
-Source = "https://github.com/frappe/bench"
+Changelog = "https://github.com/MartinKyng/hera-bench/releases"
+Documentation = "https://github.com/MartinKyng/hera-bench/tree/develop/docs"
+Homepage = "https://github.com/MartinKyng/hera-bench"
+Source = "https://github.com/MartinKyng/hera-bench"
 
 [build-system]
 requires = [

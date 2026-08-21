@@ -53,7 +53,7 @@ def setup_production(user, bench_path=".", yes=False):
 
 	print("Setting Up NGINX...")
 	make_nginx_conf(bench_path=bench_path, yes=yes)
-	fix_prod_setup_perms(bench_path, frappe_user=user)
+	fix_prod_setup_perms(bench_path, hera_user=user)
 	remove_default_nginx_configs()
 
 	bench_name = get_bench_name(bench_path)

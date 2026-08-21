@@ -4,7 +4,7 @@ on:
   pull_request:
   workflow_dispatch:
   push:
-    branches: [ main ]
+    branches: [ develop ]
 
 concurrency:
   group: ci-develop-${{ github.event_name }}-${{ github.event.number }}

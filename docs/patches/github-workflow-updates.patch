@@ -1,0 +1,68 @@
+diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+index 4d55c28..4f4681e 100644
+--- a/.github/workflows/ci.yml
++++ b/.github/workflows/ci.yml
+@@ -4,7 +4,7 @@ on:
+   pull_request:
+   workflow_dispatch:
+   push:
+-    branches: [ main ]
++    branches: [ develop ]
+ 
+ concurrency:
+   group: ci-develop-${{ github.event_name }}-${{ github.event.number }}
+diff --git a/.github/workflows/easy-install.yml b/.github/workflows/easy-install.yml
+index abc7db3..4badd31 100644
+--- a/.github/workflows/easy-install.yml
++++ b/.github/workflows/easy-install.yml
+@@ -4,7 +4,7 @@ on:
+   pull_request:
+   workflow_dispatch:
+   push:
+-    branches: [main]
++    branches: [develop]
+ 
+ concurrency:
+   group: easy-install-develop-${{ github.event_name }}-${{ github.event.number }}
+@@ -28,7 +28,7 @@ jobs:
+ 
+       - name: Perform production easy install
+         run: |
+-          python3 ${GITHUB_WORKSPACE}/easy-install.py build --deploy --tag=custom-apps:latest --project=actions_test --email=test@frappe.io --image=custom-apps --version=latest --app=erpnext
++          python3 ${GITHUB_WORKSPACE}/easy-install.py build --deploy --tag=custom-apps:latest --project=actions_test --email=admin@example.com --image=custom-apps --version=latest --app=erpnext
+           docker compose -p actions_test exec backend bench version --format json
+           docker compose -p actions_test exec backend bench --site site1.localhost list-apps --format json
+           result=$(curl -H "Host: site1.localhost" -sk https://127.0.0.1/api/method/ping | jq -r ."message")
+diff --git a/.github/workflows/linters.yml b/.github/workflows/linters.yml
+index 068a628..6c9f3bd 100644
+--- a/.github/workflows/linters.yml
++++ b/.github/workflows/linters.yml
+@@ -4,7 +4,7 @@ on:
+   pull_request:
+   workflow_dispatch:
+   push:
+-    branches: [ main ]
++    branches: [ develop ]
+ 
+ permissions:
+   contents: read
+diff --git a/.github/workflows/release.yml b/.github/workflows/release.yml
+index ade28f9..d2361d3 100644
+--- a/.github/workflows/release.yml
++++ b/.github/workflows/release.yml
+@@ -1,8 +1,14 @@
+ name: Generate Semantic Release and publish on PyPI
++
+ on:
+   push:
+     branches:
+-      - v5.x
++      - develop
++  workflow_dispatch:
++
++permissions:
++  contents: write
++
+ jobs:
+   release:
+     name: Release

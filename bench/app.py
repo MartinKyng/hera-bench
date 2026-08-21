@@ -31,9 +31,9 @@ from bench.utils import (
 	get_bench_cache_path,
 	is_bench_directory,
 	is_git_url,
-	is_valid_frappe_branch,
+	is_valid_hera_branch,
 	log,
-	run_frappe_cmd,
+	run_hera_cmd,
 	get_file_md5,
 	use_uv,
 )
@@ -51,9 +51,9 @@ class AppMeta:
 	def __init__(self, name: str, branch: str | None = None, to_clone: bool = True):
 		"""
 		name (str): This could look something like
-				1. https://github.com/frappe/healthcare.git
-				2. git@github.com:frappe/healthcare.git
-				3. frappe/healthcare@develop
+				1. https://github.com/MartinKyng/healthcare.git
+				2. git@github.com:MartinKyng/healthcare.git
+				3. MartinKyng/healthcare@develop
 				4. healthcare
 				5. healthcare@develop, healthcare@v13.12.1
 
@@ -62,7 +62,7 @@ class AppMeta:
 		 * https://docs.npmjs.com/about-semantic-versioning
 
 		class Healthcare(AppConfig):
-				dependencies = [{"frappe/erpnext": "~13.17.0"}]
+				dependencies = [{"MartinKyng/erpnext": "~13.17.0"}]
 		"""
 		self.name = name.rstrip("/")
 		self.remote_server = "github.com"
@@ -245,7 +245,7 @@ class App(AppMeta):
 
 		verbose = bench.cli.verbose or verbose
 		app_name = get_app_name(self.bench.name, self.app_name)
-		if not resolved and self.app_name != "frappe" and not ignore_resolution:
+		if not resolved and self.app_name != "hera" and not ignore_resolution:
 			click.secho(
 				f"Ignoring dependencies of {self.name}. To install dependencies use --resolve-deps",
 				fg="yellow",
@@ -314,7 +314,7 @@ class App(AppMeta):
 	def validate_app_dependencies(self, throw=False) -> None:
 		pyproject = self.get_pyproject() or {}
 		deps: Optional[dict] = (
-			pyproject.get("tool", {}).get("bench", {}).get("frappe-dependencies")
+			pyproject.get("tool", {}).get("bench", {}).get("hera-dependencies")
 		)
 		if not deps:
 			return
@@ -438,7 +438,7 @@ class App(AppMeta):
 
 	def prune_app_directory(self):
 		app_path = self.get_app_path()
-		if can_frappe_use_cached(self):
+		if can_hera_use_cached(self):
 			remove_unused_node_modules(app_path)
 
 
@@ -465,13 +465,13 @@ def can_get_cached(app_name: str, cache_key: str) -> bool:
 	return False
 
 
-def can_frappe_use_cached(app: App) -> bool:
-	min_frappe = get_required_frappe_version(app)
-	if not min_frappe:
+def can_hera_use_cached(app: App) -> bool:
+	min_hera = get_required_hera_version(app)
+	if not min_hera:
 		return False
 
 	try:
-		return sv.Version(min_frappe) in sv.SimpleSpec(">=15.12.0")
+		return sv.Version(min_hera) in sv.SimpleSpec(">=15.12.0")
 	except ValueError:
 		# Passed value is not a version string, it's an expression
 		pass
@@ -484,10 +484,10 @@ def can_frappe_use_cached(app: App) -> bool:
 
 		Hence this excludes the first supported version.
 		"""
-		return sv.Version("15.12.0") not in sv.SimpleSpec(min_frappe)
+		return sv.Version("15.12.0") not in sv.SimpleSpec(min_hera)
 	except ValueError:
 		click.secho(
-			f"Bench app-cache: invalid value found for frappe version '{min_frappe}'",
+			f"Bench app-cache: invalid value found for hera version '{min_hera}'",
 			fg="yellow",
 		)
 		# Invalid expression
@@ -497,7 +497,7 @@ def can_frappe_use_cached(app: App) -> bool:
 def validate_dependency(app: App, dep: str, req_version: str, throw=False) -> None:
 	dep_path = Path(app.bench.name) / "apps" / dep
 	if not dep_path.is_dir():
-		click.secho(f"Required frappe-dependency '{dep}' not found.", fg="yellow")
+		click.secho(f"Required hera-dependency '{dep}' not found.", fg="yellow")
 		if throw:
 			sys.exit(1)
 		return
@@ -508,7 +508,7 @@ def validate_dependency(app: App, dep: str, req_version: str, throw=False) -> No
 
 	if sv.Version(dep_version) not in sv.SimpleSpec(req_version):
 		click.secho(
-			f"Installed frappe-dependency '{dep}' version '{dep_version}' "
+			f"Installed hera-dependency '{dep}' version '{dep_version}' "
 			f"does not satisfy required version '{req_version}'. "
 			f"App '{app.name}' might not work as expected.",
 			fg="yellow",
@@ -544,25 +544,25 @@ def get_dep_version(dep: str, dep_path: Path) -> Optional[str]:
 	return None
 
 
-def get_required_frappe_version(app: App) -> Optional[str]:
+def get_required_hera_version(app: App) -> Optional[str]:
 	pyproject = app.get_pyproject() or {}
 
-	# Reference: https://github.com/frappe/bench/issues/1524
-	req_frappe = (
+	# Reference: https://github.com/MartinKyng/hera-bench/issues/1524
+	req_hera = (
 		pyproject.get("tool", {})
 		.get("bench", {})
-		.get("frappe-dependencies", {})
-		.get("frappe")
+		.get("hera-dependencies", {})
+		.get("hera")
 	)
 
-	if not req_frappe:
+	if not req_hera:
 		click.secho(
-			"Required frappe version not set in pyproject.toml, "
-			"please refer: https://github.com/frappe/bench/issues/1524",
+			"Required hera version not set in pyproject.toml, "
+			"please refer: https://github.com/MartinKyng/hera-bench/issues/1524",
 			fg="yellow",
 		)
 
-	return req_frappe
+	return req_hera
 
 
 def remove_unused_node_modules(app_path: Path) -> None:
@@ -571,7 +571,7 @@ def remove_unused_node_modules(app_path: Path) -> None:
 	to check if node_modules are utilized, this function checks if Vite
 	is being used to build the frontend code.
 
-	Since most popular Frappe apps use Vite to build their frontends,
+	Since most popular Hera apps use Vite to build their frontends,
 	this method should suffice.
 
 	Note: root package.json is ignored cause those usually belong to
@@ -614,7 +614,7 @@ def make_resolution_plan(app: App, bench: "Bench"):
 
 	for app_name in app._get_dependencies():
 		dep_app = App(app_name, bench=bench)
-		is_valid_frappe_branch(dep_app.url, dep_app.branch)
+		is_valid_hera_branch(dep_app.url, dep_app.branch)
 		dep_app.required_by = app.name
 		if dep_app.app_name in resolution:
 			click.secho(f"{dep_app.app_name} is already resolved skipping", fg="yellow")
@@ -634,8 +634,8 @@ def get_excluded_apps(bench_path="."):
 
 
 def add_to_excluded_apps_txt(app, bench_path="."):
-	if app == "frappe":
-		raise ValueError("Frappe app cannot be excluded from update")
+	if app == "hera":
+		raise ValueError("Hera app cannot be excluded from update")
 	if app not in os.listdir("apps"):
 		raise ValueError(f"The app {app} does not exist")
 	apps = get_excluded_apps(bench_path=bench_path)
@@ -669,7 +669,7 @@ def get_app(
 	cache_key=None,
 	compress_artifacts=False,
 ):
-	"""bench get-app clones a Frappe App from remote (GitHub or any other git server),
+	"""bench get-app clones a Hera App from remote (GitHub or any other git server),
 	and installs it on the current bench. This also resolves dependencies based on the
 	apps' required_apps defined in the hooks.py file.
 
@@ -698,7 +698,7 @@ def get_app(
 	branch = app.tag
 	bench_setup = False
 	restart_bench = not init_bench
-	frappe_path, frappe_branch = None, None
+	hera_path, hera_branch = None, None
 
 	if resolve_deps:
 		resolution = make_resolution_plan(app, bench)
@@ -708,9 +708,9 @@ def get_app(
 				f"{idx}. {app.name} {f'(required by {app.required_by})' if app.required_by else ''}"
 			)
 
-		if "frappe" in resolution:
-			# Todo: Make frappe a terminal dependency for all frappe apps.
-			frappe_path, frappe_branch = resolution["frappe"].url, resolution["frappe"].tag
+		if "hera" in resolution:
+			# Todo: Make hera a terminal dependency for all hera apps.
+			hera_path, hera_branch = resolution["hera"].url, resolution["hera"].tag
 
 	if not is_bench_directory(bench_path):
 		if not init_bench:
@@ -726,8 +726,8 @@ def get_app(
 		bench_path = get_available_folder_name(f"{app.repo}-bench", bench_path)
 		init(
 			path=bench_path,
-			frappe_path=frappe_path,
-			frappe_branch=frappe_branch or branch,
+			hera_path=hera_path,
+			hera_branch=hera_branch or branch,
 		)
 		os.chdir(bench_path)
 		bench_setup = True
@@ -798,9 +798,9 @@ def install_resolved_deps(
 ):
 	from bench.utils.app import check_existing_dir
 
-	if "frappe" in resolution:
+	if "hera" in resolution:
 		# Terminal dependency
-		del resolution["frappe"]
+		del resolution["hera"]
 
 	for repo_name, app in reversed(resolution.items()):
 		existing_dir, path_to_app = check_existing_dir(bench_path, repo_name)
@@ -860,7 +860,7 @@ def install_resolved_deps(
 
 
 def new_app(app, no_git=None, bench_path="."):
-	if bench.FRAPPE_VERSION in (0, None):
+	if bench.HERA_VERSION in (0, None):
 		click.secho(
 			f"{os.path.realpath(bench_path)} is not a valid bench directory.",
 			fg="red",
@@ -878,13 +878,13 @@ def new_app(app, no_git=None, bench_path="."):
 	apps = os.path.abspath(os.path.join(bench_path, "apps"))
 	args = ["make-app", apps, app]
 	if no_git:
-		if bench.FRAPPE_VERSION < 14:
-			click.secho("Frappe v14 or greater is needed for '--no-git' flag", fg="red")
+		if bench.HERA_VERSION < 14:
+			click.secho("Hera v14 or greater is needed for '--no-git' flag", fg="red")
 			return
 		args.append(no_git)
 
 	logger.log(f"creating new app {app}")
-	run_frappe_cmd(*args, bench_path=bench_path)
+	run_hera_cmd(*args, bench_path=bench_path)
 	install_app(app, bench_path=bench_path)
 
 
@@ -921,10 +921,10 @@ def install_app(
 
 	env = None
 
-	# macOS needs a custom PKG_CONFIG_DIR for frappe v16+
-	from bench.utils.app import get_current_frappe_version
+	# macOS needs a custom PKG_CONFIG_DIR for hera v16+
+	from bench.utils.app import get_current_hera_version
 
-	if app == "frappe" and get_current_frappe_version(bench_path) >= 16:
+	if app == "hera" and get_current_hera_version(bench_path) >= 16:
 		check_pkg_config()
 
 		if sys.platform == "darwin":
@@ -1052,7 +1052,7 @@ Here are your choices:
 
 def use_rq(bench_path):
 	bench_path = os.path.abspath(bench_path)
-	celery_app = os.path.join(bench_path, "apps", "frappe", "frappe", "celery_app.py")
+	celery_app = os.path.join(bench_path, "apps", "hera", "hera", "celery_app.py")
 	return not os.path.exists(celery_app)
 
 

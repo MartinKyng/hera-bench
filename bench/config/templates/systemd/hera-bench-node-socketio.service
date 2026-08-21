@@ -1,5 +1,5 @@
 [Unit]
-After={{ bench_name }}-frappe-web.service
+After={{ bench_name }}-hera-web.service
 Description="{{ bench_name }}-node-socketio"
 PartOf={{ bench_name }}-web.target
 
