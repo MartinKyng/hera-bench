@@ -77,12 +77,12 @@ def set_url_root(site, url_root):
 	set_url_root(site, url_root)
 
 
-@click.command("set-mariadb-host", help="Set MariaDB host for bench")
+@click.command("set-postgres-host", help="Set PostgreSQL host for bench")
 @click.argument("host")
-def set_mariadb_host(host):
-	from bench.utils.bench import set_mariadb_host
+def set_postgres_host(host):
+	from bench.utils.bench import set_postgres_host
 
-	set_mariadb_host(host)
+	set_postgres_host(host)
 
 
 @click.command("set-redis-cache-host", help="Set Redis cache host for bench")

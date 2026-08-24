@@ -82,7 +82,7 @@ def init(
 
 	# remote apps
 	else:
-		hera_path = hera_path or "https://github.com/MartinKyng/hera.git"
+		hera_path = hera_path or "https://github.com/RoyalGroupofCompanies/hera.git"
 		is_valid_hera_branch(hera_path=hera_path, hera_branch=hera_branch)
 		get_app(
 			hera_path,
@@ -207,7 +207,7 @@ def setup_fonts():
 	if os.path.exists("/etc/fonts_backup"):
 		return
 
-	exec_cmd("git clone https://github.com/MartinKyng/fonts.git", cwd="/tmp")
+	exec_cmd("git clone https://github.com/RoyalGroupofCompanies/fonts.git", cwd="/tmp")
 	os.rename("/etc/fonts", "/etc/fonts_backup")
 	os.rename("/usr/share/fonts", "/usr/share/fonts_backup")
 	os.rename(os.path.join(fonts_path, "etc_fonts"), "/etc/fonts")
@@ -215,14 +215,14 @@ def setup_fonts():
 	shutil.rmtree(fonts_path)
 	exec_cmd("fc-cache -fv")
 
-def get_mariadb_pkgconfig_path() -> str:
+def get_postgres_pkgconfig_path() -> str:
 	import subprocess
-	return subprocess.check_output(["brew", "--prefix", "mariadb-connector-c"]).decode("utf-8").strip() + "/lib/pkgconfig"
+	return subprocess.check_output(["brew", "--prefix", "libpq"]).decode("utf-8").strip() + "/lib/pkgconfig"
 
 def check_pkg_config():
 	"""
-	pkg-config is required for building some python packages like libmysqlclient
+	pkg-config is required for building database drivers such as psycopg
 	"""
 	if shutil.which("pkg-config") is None:
 		raise Exception("pkg-config is not installed. Please install it before proceeding.\n"
-		"You can refer to https://github.com/MartinKyng/hera-bench/tree/develop/docs")
+		"You can refer to https://github.com/RoyalGroupofCompanies/hera-bench/tree/develop/docs")

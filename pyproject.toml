@@ -38,10 +38,10 @@ dynamic = [
 bench = "bench.cli:cli"
 
 [project.urls]
-Changelog = "https://github.com/MartinKyng/hera-bench/releases"
-Documentation = "https://github.com/MartinKyng/hera-bench/tree/develop/docs"
-Homepage = "https://github.com/MartinKyng/hera-bench"
-Source = "https://github.com/MartinKyng/hera-bench"
+Changelog = "https://github.com/RoyalGroupofCompanies/hera-bench/releases"
+Documentation = "https://github.com/RoyalGroupofCompanies/hera-bench/tree/develop/docs"
+Homepage = "https://github.com/RoyalGroupofCompanies/hera-bench"
+Source = "https://github.com/RoyalGroupofCompanies/hera-bench"
 
 [build-system]
 requires = [

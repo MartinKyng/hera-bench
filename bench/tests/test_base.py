@@ -30,10 +30,10 @@ class TestBenchBase(unittest.TestCase):
 		for bench_name in self.benches:
 			bench_path = os.path.join(self.benches_path, bench_name)
 			bench = Bench(bench_path)
-			mariadb_password = (
+			postgres_password = (
 				"travis"
 				if os.environ.get("CI")
-				else getpass.getpass(prompt="Enter MariaDB root Password: ")
+				else getpass.getpass(prompt="Enter PostgreSQL superuser password: ")
 			)
 
 			if bench.exists:
@@ -45,8 +45,8 @@ class TestBenchBase(unittest.TestCase):
 							site,
 							"--force",
 							"--no-backup",
-							"--root-password",
-							mariadb_password,
+							"--db-root-password",
+							postgres_password,
 						],
 						cwd=bench_path,
 					)
@@ -94,7 +94,7 @@ class TestBenchBase(unittest.TestCase):
 		new_site_cmd = ["bench", "new-site", site_name, "--admin-password", "admin"]
 
 		if os.environ.get("CI"):
-			new_site_cmd.extend(["--mariadb-root-password", "travis"])
+			new_site_cmd.extend(["--db-type", "postgres", "--db-root-password", "travis"])
 
 		subprocess.call(new_site_cmd, cwd=os.path.join(self.benches_path, bench_name))
 
@@ -104,7 +104,7 @@ class TestBenchBase(unittest.TestCase):
 
 		if not os.path.exists(hera_tmp_path):
 			exec_cmd(
-				f"git clone https://github.com/MartinKyng/hera -b {HERA_BRANCH} --depth 1 --origin upstream {hera_tmp_path}"
+				f"git clone https://github.com/RoyalGroupofCompanies/hera -b {HERA_BRANCH} --depth 1 --origin upstream {hera_tmp_path}"
 			)
 
 		kwargs.update(
@@ -119,7 +119,7 @@ class TestBenchBase(unittest.TestCase):
 		if not os.path.exists(os.path.join(self.benches_path, bench_name)):
 			init(bench_name, **kwargs)
 			exec_cmd(
-				"git remote set-url upstream https://github.com/MartinKyng/hera",
+				"git remote set-url upstream https://github.com/RoyalGroupofCompanies/hera",
 				cwd=os.path.join(self.benches_path, bench_name, "apps", "hera"),
 			)
 

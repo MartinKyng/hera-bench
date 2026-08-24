@@ -1,6 +1,6 @@
 <div align="center">
 
-![Logo](https://raw.githubusercontent.com/MartinKyng/hera-bench/develop/resources/logo.png)
+![Logo](https://raw.githubusercontent.com/RoyalGroupofCompanies/hera-bench/develop/resources/logo.png)
 
 ## Bench
 **CLI to manage Hera applications**
@@ -31,7 +31,7 @@ A typical bench setup provides two types of environments &mdash; Development and
 The setup for each of these installations can be achieved in multiple ways:
 
  - [Containerized Installation](#containerized-installation)
- - [Manual Installation](https://github.com/MartinKyng/hera-bench/tree/develop/docs)
+ - [Manual Installation](https://github.com/RoyalGroupofCompanies/hera-bench/tree/develop/docs)
 
 We recommend using Docker Installation to setup a Production Environment. For Development, you may choose either of the two methods to setup an instance.
 
@@ -42,29 +42,29 @@ A Hera instance can be setup and replicated easily using [Docker](https://docker
 To setup either of the environments, you will need to clone the official docker repository:
 
 ```sh
-git clone https://github.com/MartinKyng/hera_docker.git
+git clone https://github.com/RoyalGroupofCompanies/hera_docker.git
 ```
 
-A quick setup guide for both the environments can be found below. For more details, check out the [Hera Docker Repository](https://github.com/MartinKyng/hera_docker).
+A quick setup guide for both the environments can be found below. For more details, check out the [Hera Docker Repository](https://github.com/RoyalGroupofCompanies/hera_docker).
 
 ### Easy Install Script
 
 The Easy Install script should get you going with a Hera setup with minimal manual intervention and effort.
 
-This script uses Docker with the [Hera Docker Repository](https://github.com/MartinKyng/hera_docker) and can be used for both Development setup and Production setup.
+This script uses Docker with the [Hera Docker Repository](https://github.com/RoyalGroupofCompanies/hera_docker) and can be used for both Development setup and Production setup.
 
 #### Setup
 
 Download the Easy Install script and execute it:
 
 ```sh
-wget https://raw.githubusercontent.com/MartinKyng/hera-bench/develop/easy-install.py
+wget https://raw.githubusercontent.com/RoyalGroupofCompanies/hera-bench/develop/easy-install.py
 python3 easy-install.py deploy --email=user@domain.tld --sitename=subdomain.domain.tld --app=erpnext
 ```
 
 This script will install docker on your system and will fetch the required containers, setup bench and a default ERPNext instance.
 
-The script will generate MySQL root password and an Administrator password for the Hera/ERPNext instance, which will then be saved under `$HOME/passwords.txt` of the user used to setup the instance.
+The script will generate PostgreSQL superuser password and an Administrator password for the Hera/ERPNext instance, which will then be saved under `$HOME/passwords.txt` of the user used to setup the instance.
 It will also generate a new compose file under `$HOME/<project-name>-compose.yml`.
 
 When the setup is complete, you will be able to access the system at `http://<your-server-ip>`, wherein you can use the Administrator password to login.
@@ -103,7 +103,7 @@ options:
                         Allow overwriting existing .env sites when --sitename differs from configured sites inside the .env
   -p, --push            Push the built image to registry
   -r HERA_PATH, --hera-path HERA_PATH
-                        Hera Repository to use, default: https://github.com/MartinKyng/hera
+                        Hera Repository to use, default: https://github.com/RoyalGroupofCompanies/hera
   -b HERA_BRANCH, --hera-branch HERA_BRANCH
                         Hera branch to use, default: version-15
   -j APPS_JSON, --apps-json APPS_JSON
@@ -206,7 +206,7 @@ Example apps.json
 ```json
 [
   {
-    "url": "https://github.com/MartinKyng/wiki.git",
+    "url": "https://github.com/RoyalGroupofCompanies/wiki.git",
     "branch": "master"
   }
 ]
@@ -314,14 +314,14 @@ bench completions --bash
 This writes a completion script to `~/.config/bench/` and appends a `source` line to your shell rc file. Re-run it after installing new apps or upgrading bench, since the script is generated from the current command tree.
 
 
-For more in-depth information on commands and their usage, follow [Commands and Usage](https://github.com/MartinKyng/hera-bench/blob/develop/docs/commands_and_usage.md). As for a consolidated list of bench commands, check out [Bench Usage](https://github.com/MartinKyng/hera-bench/blob/develop/docs/bench_usage.md).
+For more in-depth information on commands and their usage, follow [Commands and Usage](https://github.com/RoyalGroupofCompanies/hera-bench/blob/develop/docs/commands_and_usage.md). As for a consolidated list of bench commands, check out [Bench Usage](https://github.com/RoyalGroupofCompanies/hera-bench/blob/develop/docs/bench_usage.md).
 
-![Help](https://raw.githubusercontent.com/MartinKyng/hera-bench/develop/resources/help.png)
+![Help](https://raw.githubusercontent.com/RoyalGroupofCompanies/hera-bench/develop/resources/help.png)
 
 
 ## Custom Bench Commands
 
-If you wish to extend the capabilities of bench with your own custom Hera Application, you may follow [Adding Custom Bench Commands](https://github.com/MartinKyng/hera-bench/blob/develop/docs/bench_custom_cmd.md).
+If you wish to extend the capabilities of bench with your own custom Hera Application, you may follow [Adding Custom Bench Commands](https://github.com/RoyalGroupofCompanies/hera-bench/blob/develop/docs/bench_custom_cmd.md).
 
 
 ## Guides
@@ -347,7 +347,7 @@ To contribute and develop on the bench CLI tool, clone this repo and create an e
 ### Clone and install
 
 ```sh
-git clone https://github.com/MartinKyng/hera-bench ~/bench-repo
+git clone https://github.com/RoyalGroupofCompanies/hera-bench ~/bench-repo
 pip install -e ~/bench-repo
 ```
 
@@ -375,22 +375,22 @@ To confirm the switch, check the output of `bench src`. It should change from so
 
 Bench's version information can be accessed via `bench.VERSION` in the package's __init__.py file. Releases are published on GitHub and PyPI.
 
-[GitHub](https://github.com/MartinKyng/hera-bench/releases)
+[GitHub](https://github.com/RoyalGroupofCompanies/hera-bench/releases)
 [Pypi](https://pypi.org/project/hera-bench)
 
 
 ## Learn and connect
 
-- [Discuss](https://github.com/MartinKyng/hera-bench/discussions)
-- [Issues](https://github.com/MartinKyng/hera-bench/issues)
+- [Discuss](https://github.com/RoyalGroupofCompanies/hera-bench/discussions)
+- [Issues](https://github.com/RoyalGroupofCompanies/hera-bench/issues)
 
 ## Contribute
 To contribute to this project, please review the [Contribution Guidelines](docs/contribution_guidelines.md) for detailed instructions.
 
 ## Security
-The Hera team and community prioritize security. If you discover a security issue, please report it via our [Security Report Form](https://github.com/MartinKyng/hera-bench/security).
+The Hera team and community prioritize security. If you discover a security issue, please report it via our [Security Report Form](https://github.com/RoyalGroupofCompanies/hera-bench/security).
 Your responsible disclosure helps keep Hera and its users safe. We'll do our best to respond quickly and keep you informed throughout the process.
-For guidelines on reporting, check out our [Reporting Guidelines](https://github.com/MartinKyng/hera-bench/security).
+For guidelines on reporting, check out our [Reporting Guidelines](https://github.com/RoyalGroupofCompanies/hera-bench/security).
 
 <br/><br/>
 <div align="center">

@@ -86,7 +86,7 @@ from bench.commands.utils import (
 	migrate_env,
 	renew_lets_encrypt,
 	restart,
-	set_mariadb_host,
+	set_postgres_host,
 	set_nginx_port,
 	set_redis_cache_host,
 	set_redis_queue_host,
@@ -103,7 +103,7 @@ bench_command.add_command(set_nginx_port)
 bench_command.add_command(set_ssl_certificate)
 bench_command.add_command(set_ssl_certificate_key)
 bench_command.add_command(set_url_root)
-bench_command.add_command(set_mariadb_host)
+bench_command.add_command(set_postgres_host)
 bench_command.add_command(set_redis_cache_host)
 bench_command.add_command(set_redis_queue_host)
 bench_command.add_command(set_redis_socketio_host)

@@ -17,10 +17,10 @@ Every change in this rebrand follows this table:
 | `frappe` (framework app / python module) | `hera` | `apps/hera`, `python -m hera.utils.bench_helper`, gunicorn `hera.app:application` |
 | `FRAPPE_*` constants/env vars | `HERA_*` | `FRAPPE_VERSION`→`HERA_VERSION`, `FRAPPE_DOCKER_BUILD`→`HERA_DOCKER_BUILD`, `FRAPPE_KEY`→`HERA_KEY`, `FRAPPE_BRANCH`→`HERA_BRANCH` |
 | `frappe_*` functions/keys | `hera_*` | `run_frappe_cmd`→`run_hera_cmd`, `is_frappe_app`→`is_hera_app`, `is_valid_frappe_branch`→`is_valid_hera_branch`, `get_current_frappe_version`→`get_current_hera_version`, `set_frappe_version`→`set_hera_version`, config key `frappe_user`→`hera_user` |
-| `github.com/frappe/bench` | `github.com/MartinKyng/hera-bench` | code, docs, CI, pyproject URLs |
-| `github.com/frappe/frappe` | `github.com/MartinKyng/hera` | default framework repo, tests, easy-install |
-| `github.com/frappe/frappe_docker` | `github.com/MartinKyng/hera_docker` | `easy-install.py` docker assets |
-| `github.com/frappe/*` (fonts, wiki, healthcare, erpnext, bench_manager examples) | `github.com/MartinKyng/*` | helper scripts, docs |
+| `github.com/frappe/bench` | `github.com/RoyalGroupofCompanies/hera-bench` | code, docs, CI, pyproject URLs |
+| `github.com/frappe/frappe` | `github.com/RoyalGroupofCompanies/hera` | default framework repo, tests, easy-install |
+| `github.com/frappe/frappe_docker` | `github.com/RoyalGroupofCompanies/hera_docker` | `easy-install.py` docker assets |
+| `github.com/frappe/*` (fonts, wiki, healthcare, erpnext, bench_manager examples) | `github.com/RoyalGroupofCompanies/*` | helper scripts, docs |
 | `frappe.io`, `docs.frappe.io`, `frappeframework.com`, `discuss.frappe.io`, `frappecloud.com` | GitHub repo/docs/discussions URLs (marketing blocks removed) | README, issue templates, code comments |
 | `frappe-bench-*` systemd units | `hera-bench-*` | `bench/config/templates/systemd/` + `bench/config/systemd.py` |
 | `/etc/frappe_bench_dir`, `/etc/sudoers.d/frappe` | `/etc/hera_bench_dir`, `/etc/sudoers.d/hera` | `bench/cli.py`, `bench/utils/__init__.py` |
@@ -40,11 +40,11 @@ The transformation applied these steps in exactly this order — specific URLs
 first, generic tokens last, so nothing gets double-rewritten:
 
 1. **URL rules (specific → generic)**
-   - `github.com/frappe/frappe_docker` → `github.com/MartinKyng/hera_docker`
-   - `github.com/frappe/bench` → `github.com/MartinKyng/hera-bench`
-   - `github.com/frappe/frappe` → `github.com/MartinKyng/hera`
-   - remaining `github.com/frappe/` → `github.com/MartinKyng/`
-   - `docs.frappe.io/*`, `frappeframework.com/docs/*`, `frappe.io/docs/*` → `github.com/MartinKyng/hera-bench/tree/develop/docs`
+   - `github.com/frappe/frappe_docker` → `github.com/RoyalGroupofCompanies/hera_docker`
+   - `github.com/frappe/bench` → `github.com/RoyalGroupofCompanies/hera-bench`
+   - `github.com/frappe/frappe` → `github.com/RoyalGroupofCompanies/hera`
+   - remaining `github.com/frappe/` → `github.com/RoyalGroupofCompanies/`
+   - `docs.frappe.io/*`, `frappeframework.com/docs/*`, `frappe.io/docs/*` → `github.com/RoyalGroupofCompanies/hera-bench/tree/develop/docs`
    - `frappe.io/bench` → repo URL, `discuss.frappe.io` → repo discussions
    - `pypi.org/pypi/frappe-bench/json` → `pypi.org/pypi/hera-bench/json` (the self-update version check in `bench/utils/__init__.py`)
 2. **Token rules (case variants with alphanumeric boundaries)**
@@ -62,7 +62,7 @@ first, generic tokens last, so nothing gets double-rewritten:
 4. **Hand edits the bulk pass can't safely do**
    - README top block (logo, badges, removed cloud-marketing + upstream-only links)
    - `bench/utils/__init__.py` `find_org()`: bare app names now resolve under the
-     `MartinKyng` GitHub account instead of the upstream orgs
+     `RoyalGroupofCompanies` GitHub account instead of the upstream orgs
    - `.github/ISSUE_TEMPLATE/*`, `PULL_REQUEST_TEMPLATE.md` link targets
    - Historic upstream issue references in comments reworded to this repo
 
@@ -104,11 +104,11 @@ Or just push to `develop` / run the **Release** workflow once these one-time
 prerequisites are done:
 
 1. **Create the ecosystem forks** (runtime dependencies of the tool):
-   - `github.com/MartinKyng/hera` — fork of the framework with its python
+   - `github.com/RoyalGroupofCompanies/hera` — fork of the framework with its python
      package renamed to `hera` (the CLI runs `-m hera.utils.bench_helper`)
-   - `github.com/MartinKyng/hera_docker` — only needed for `easy-install.py`
+   - `github.com/RoyalGroupofCompanies/hera_docker` — only needed for `easy-install.py`
    - Any default apps you want resolvable by bare name (they resolve under
-     `MartinKyng/*`)
+     `RoyalGroupofCompanies/*`)
 2. **PyPI**: register `hera-bench` (name verified available) and create an API
    token scoped to the project.
 3. **GitHub secrets** (repo → Settings → Secrets and variables → Actions):
@@ -123,13 +123,13 @@ prerequisites are done:
 - [ ] `pip install -e . && bench --help` works
 - [ ] unit tests that don't need the network pass
 - [ ] `hatch build` + `twine check dist/*` pass
-- [ ] `bench init` smoke-test against `MartinKyng/hera` once the fork exists
+- [ ] `bench init` smoke-test against `RoyalGroupofCompanies/hera` once the fork exists
 
 ## 5. Known follow-ups (not code issues)
 
 - CI jobs that clone the framework (`bench/tests/test_init.py`,
   production-setup tests, `easy-install.yml`) can only go green **after** the
-  `MartinKyng/hera` (and for docker, `hera_docker`) forks exist.
+  `RoyalGroupofCompanies/hera` (and for docker, `hera_docker`) forks exist.
 - Existing benches created by the upstream tool store `frappe_user` in
   `common_site_config.json`; that key is now `hera_user` — treat v1 as a
   fresh-install tool, or migrate old configs by renaming the key.

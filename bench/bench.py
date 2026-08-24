@@ -35,7 +35,7 @@ from bench.utils.bench import (
 )
 from bench.utils.render import job, step
 from bench.utils.app import get_app_name, get_current_version
-from bench.utils.system import get_mariadb_pkgconfig_path, check_pkg_config
+from bench.utils.system import get_postgres_pkgconfig_path, check_pkg_config
 from bench.app import is_git_repo
 
 
@@ -386,7 +386,7 @@ class BenchSetup(Base):
 					# macOS needs a custom PKG_CONFIG_DIR for hera v16+
 					if sys.platform == "darwin":
 						env = {
-							"PKG_CONFIG_PATH": get_mariadb_pkgconfig_path(),
+							"PKG_CONFIG_PATH": get_postgres_pkgconfig_path(),
 						}
 
 				if use_uv():
@@ -529,7 +529,7 @@ class BenchSetup(Base):
 					check_pkg_config()
 				if sys.platform == "darwin":
 					env = {
-						"PKG_CONFIG_PATH": get_mariadb_pkgconfig_path(),
+						"PKG_CONFIG_PATH": get_postgres_pkgconfig_path(),
 					}
 
 			if use_uv():

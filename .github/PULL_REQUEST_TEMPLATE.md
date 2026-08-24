@@ -10,11 +10,11 @@ Some key notes before you open a PR:
 
 Also, if you're new here
 
-- Documentation Guidelines => https://github.com/MartinKyng/hera-bench/blob/develop/docs/contribution_guidelines.md
+- Documentation Guidelines => https://github.com/RoyalGroupofCompanies/hera-bench/blob/develop/docs/contribution_guidelines.md
 
-- Contribution Guide => https://github.com/MartinKyng/hera-bench/blob/develop/docs/contribution_guidelines.md
+- Contribution Guide => https://github.com/RoyalGroupofCompanies/hera-bench/blob/develop/docs/contribution_guidelines.md
 
-- Pull Request Checklist => https://github.com/MartinKyng/hera-bench/blob/develop/docs/contribution_guidelines.md
+- Pull Request Checklist => https://github.com/RoyalGroupofCompanies/hera-bench/blob/develop/docs/contribution_guidelines.md
 
 -->
 

@@ -7,7 +7,7 @@
   roles:
     - { role: common,            tags: common                                               }
     - { role: locale,            tags: locale                                               }
-    - { role: mariadb,           tags: mariadb                                              }
+    - { role: postgresql,        tags: postgresql                                              }
     - { role: nodejs,            tags: nodejs                                               }
     - { role: swap,              tags: swap,             when: production and not container }
     - { role: logwatch,          tags: logwatch,         when: production                   }

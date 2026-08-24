@@ -97,7 +97,7 @@ These commands belong directly to the bench group so they can be invoked directl
  - **set-ssl-certificate**: Set SSL certificate path for site
  - **set-ssl-key**: Set SSL certificate private key path for site
  - **set-url-root**: Set URL root for site
- - **set-mariadb-host**: Set MariaDB host for bench
+ - **set-postgres-host**: Set PostgreSQL host for bench
  - **set-redis-cache-host**: Set Redis cache host for bench
  - **set-redis-queue-host**: Set Redis queue host for bench
  - **set-redis-socketio-host**: Set Redis socketio host for bench
@@ -138,7 +138,7 @@ The setup commands used for setting up the Hera environment in context of the cu
  - **socketio**: Setup node dependencies for socketio server
  - **requirements**: Setup Python and Node dependencies
 
- - **manager**: Setup `bench-manager.local` site with the [Bench Manager](https://github.com/MartinKyng/hera-bench_manager) app, a GUI for bench installed on it.
+ - **manager**: Setup `bench-manager.local` site with the [Bench Manager](https://github.com/RoyalGroupofCompanies/hera-bench_manager) app, a GUI for bench installed on it.
 
  - **procfile**: Generate Procfile for bench start
 
@@ -194,7 +194,7 @@ The install group commands are used for manipulating system level dependencies. 
  - **nginx**: Installs NGINX. If user is specified, sudoers is setup for that user
  - **packer**: Installs Oracle virtualbox and packer 1.2.1
  - **psutil**: Installs psutil via pip
- - **mariadb**: Install and setup MariaDB of specified version and root password
+ - **postgres**: Install PostgreSQL
  - **wkhtmltopdf**: Installs wkhtmltopdf v0.12.3 for linux
  - **supervisor**: Installs supervisor. If user is specified, sudoers is setup for that user
  - **fail2ban**: Install fail2ban, an intrusion prevention software framework that protects computer servers from brute-force attacks

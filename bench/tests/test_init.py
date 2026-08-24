@@ -51,6 +51,7 @@ class TestBenchInit(TestBenchBase):
 		self.assert_common_site_config(
 			"test-bench-1",
 			{
+				"db_type": "postgres",
 				"webserver_port": 8000,
 				"socketio_port": 9000,
 				"file_watcher_port": 6787,
@@ -63,6 +64,7 @@ class TestBenchInit(TestBenchBase):
 		self.assert_common_site_config(
 			"test-bench-2",
 			{
+				"db_type": "postgres",
 				"webserver_port": 8001,
 				"socketio_port": 9001,
 				"file_watcher_port": 6788,

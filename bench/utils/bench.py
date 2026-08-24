@@ -517,7 +517,7 @@ def update(
 
 	print(
 		"_" * 80 + "\nBench: Deployment tool for Hera and Hera Applications"
-		" (https://github.com/MartinKyng/hera-bench).\nOpen source depends on your contributions, so do"
+		" (https://github.com/RoyalGroupofCompanies/hera-bench).\nOpen source depends on your contributions, so do"
 		" give back by submitting bug reports, patches and fixes and be a part of the"
 		" community :)"
 	)
@@ -580,8 +580,8 @@ def remove_backups_crontab(bench_path="."):
 	system_crontab.remove_all(command=job_command)
 
 
-def set_mariadb_host(host, bench_path="."):
-	update_common_site_config({"db_host": host}, bench_path=bench_path)
+def set_postgres_host(host, bench_path="."):
+	update_common_site_config({"db_host": host, "db_type": "postgres"}, bench_path=bench_path)
 
 
 def set_redis_cache_host(host, bench_path="."):

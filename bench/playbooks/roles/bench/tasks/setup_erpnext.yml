@@ -16,7 +16,7 @@
     when: not without_site
 
   - name: Create a new site
-    command: "bench new-site {{ site }} --admin-password '{{ admin_password }}' --mariadb-root-password '{{ mysql_root_password }}'"
+    command: "bench new-site {{ site }} --admin-password '{{ admin_password }}' --db-type postgres --db-root-password '{{ postgres_password }}'"
     args:
       chdir: "{{ bench_path }}"
     when: not without_site and not site_folder.stat.exists
