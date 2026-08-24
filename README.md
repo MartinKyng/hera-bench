@@ -64,7 +64,7 @@ python3 easy-install.py deploy --email=user@domain.tld --sitename=subdomain.doma
 
 This script will install docker on your system and will fetch the required containers, setup bench and a default ERPNext instance.
 
-The script will generate MySQL root password and an Administrator password for the Hera/ERPNext instance, which will then be saved under `$HOME/passwords.txt` of the user used to setup the instance.
+The script will generate PostgreSQL superuser password and an Administrator password for the Hera/ERPNext instance, which will then be saved under `$HOME/passwords.txt` of the user used to setup the instance.
 It will also generate a new compose file under `$HOME/<project-name>-compose.yml`.
 
 When the setup is complete, you will be able to access the system at `http://<your-server-ip>`, wherein you can use the Administrator password to login.

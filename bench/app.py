@@ -901,7 +901,7 @@ def install_app(
 ):
 	import bench.cli as bench_cli
 	from bench.bench import Bench
-	from bench.utils.system import get_mariadb_pkgconfig_path, check_pkg_config
+	from bench.utils.system import get_postgres_pkgconfig_path, check_pkg_config
 
 	install_text = f"Installing {app}"
 	click.secho(install_text, fg="yellow")
@@ -929,7 +929,7 @@ def install_app(
 
 		if sys.platform == "darwin":
 			env = {
-				"PKG_CONFIG_PATH": get_mariadb_pkgconfig_path(),
+				"PKG_CONFIG_PATH": get_postgres_pkgconfig_path(),
 			}
 
 	if use_uv():

@@ -13,7 +13,7 @@
         name:
           - cmake
           - redis
-          - mariadb
+          - postgresql@16
           - nodejs
         state: present
 
@@ -23,13 +23,11 @@
           - wkhtmltopdf
         state: present
 
-    - name: configure mariadb
-      include_tasks: roles/mariadb/tasks/main.yml
-      vars:
-        mysql_conf_tpl: roles/mariadb/files/mariadb_config.cnf
+    - name: configure PostgreSQL
+      include_tasks: roles/postgresql/tasks/main.yml
 
-    - name: Install MySQLdb in global env
-      pip: name=mysql-python version=1.2.5
+    - name: Install PostgreSQL driver in global env
+      pip: name=psycopg[binary]
 
     # setup hera-bench
     - include_tasks: includes/setup_bench.yml

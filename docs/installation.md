@@ -20,7 +20,7 @@ To manually install hera/erpnext, you can follow this [this wiki](https://github
 • Python 3.6+
 • Node.js 12
 • Redis 5					(caching and realtime updates)
-• MariaDB 10.3 / Postgres 9.5			(to run database driven apps)
+• PostgreSQL			(to run database driven apps)
 • yarn 1.12+					(js dependency manager)
 • pip 15+					(py dependency manager)
 • cron 						(scheduled jobs)

@@ -151,7 +151,7 @@ def write_to_env(
         f"ERPNEXT_VERSION={erpnext_version}\n",
         f"DB_PASSWORD={db_pass}\n",
         "DB_HOST=db\n",
-        "DB_PORT=3306\n",
+        "DB_PORT=5432\n",
         "REDIS_CACHE=redis-cache:6379\n",
         "REDIS_QUEUE=redis-queue:6379\n",
         "REDIS_SOCKETIO=redis-socketio:6379\n",
@@ -265,7 +265,7 @@ def start_prod(
             os.path.join(os.path.expanduser("~"), f"{project}-passwords.txt"), "w"
         ) as en:
             en.writelines(f"ADMINISTRATOR_PASSWORD={admin_pass}\n")
-            en.writelines(f"MARIADB_ROOT_PASSWORD={db_pass}\n")
+            en.writelines(f"POSTGRES_PASSWORD={db_pass}\n")
     else:
         env = get_from_env(env_file_dir, env_file_name)
         env_sites, env_has_site_config = get_sites_from_env_config(env, env_file_path)
@@ -388,7 +388,7 @@ def start_prod(
                 "-f",
                 "compose.yaml",
                 "-f",
-                "overrides/compose.mariadb.yaml",
+                "overrides/compose.postgres.yaml",
                 "-f",
                 "overrides/compose.redis.yaml",
                 "-f",
@@ -479,7 +479,7 @@ def setup_prod(
         create_site(sitename, project, db_pass, admin_pass, apps)
 
     cprint(
-        f"MariaDB root password is {db_pass}",
+        f"PostgreSQL superuser password is {db_pass}",
         level=2,
     )
     cprint(
@@ -618,7 +618,7 @@ def create_site(
         "backend",
         "bench",
         "new-site",
-        "--no-mariadb-socket",
+        "--db-type=postgres",
         f"--db-root-password={db_pass}",
         f"--admin-password={admin_pass}",
     ]

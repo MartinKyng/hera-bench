@@ -215,13 +215,13 @@ def setup_fonts():
 	shutil.rmtree(fonts_path)
 	exec_cmd("fc-cache -fv")
 
-def get_mariadb_pkgconfig_path() -> str:
+def get_postgres_pkgconfig_path() -> str:
 	import subprocess
-	return subprocess.check_output(["brew", "--prefix", "mariadb-connector-c"]).decode("utf-8").strip() + "/lib/pkgconfig"
+	return subprocess.check_output(["brew", "--prefix", "libpq"]).decode("utf-8").strip() + "/lib/pkgconfig"
 
 def check_pkg_config():
 	"""
-	pkg-config is required for building some python packages like libmysqlclient
+	pkg-config is required for building database drivers such as psycopg
 	"""
 	if shutil.which("pkg-config") is None:
 		raise Exception("pkg-config is not installed. Please install it before proceeding.\n"

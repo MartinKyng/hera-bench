@@ -1,0 +1,32 @@
+---
+- name: Install PostgreSQL packages on Debian-family systems
+  apt:
+    name:
+      - postgresql
+      - postgresql-contrib
+      - libpq-dev
+    state: present
+    update_cache: yes
+  when: ansible_os_family == 'Debian'
+
+- name: Install PostgreSQL packages on RedHat-family systems
+  package:
+    name:
+      - postgresql-server
+      - postgresql-contrib
+      - libpq-devel
+    state: present
+  when: ansible_os_family == 'RedHat'
+
+- name: Install PostgreSQL on macOS
+  homebrew:
+    name: postgresql@16
+    state: present
+  when: ansible_distribution == 'MacOSX'
+
+- name: Enable and start PostgreSQL on Debian-family systems
+  service:
+    name: postgresql
+    state: started
+    enabled: yes
+  when: ansible_os_family == 'Debian'

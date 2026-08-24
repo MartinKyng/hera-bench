@@ -22,23 +22,9 @@ def install_prerequisites():
 	run_playbook("site.yml", tag="common, redis")
 
 
-@click.command(
-	"mariadb", help="Install and setup MariaDB of specified version and root password"
-)
-@click.option("--mysql_root_password", "--mysql-root-password",
-			  "--mariadb_root_password", "--mariadb-root-password", default="")
-@click.option("--version", default="10.3")
-def install_mariadb(mysql_root_password, version):
-	if mysql_root_password:
-		extra_vars.update(
-			{
-				"mysql_root_password": mysql_root_password,
-			}
-		)
-
-	extra_vars.update({"mariadb_version": version})
-
-	run_playbook("site.yml", extra_vars=extra_vars, tag="mariadb")
+@click.command("postgres", help="Install and configure PostgreSQL")
+def install_postgres():
+	run_playbook("site.yml", extra_vars=extra_vars, tag="postgresql")
 
 
 @click.command("wkhtmltopdf", help="Installs wkhtmltopdf v0.12.3 for linux")
@@ -112,7 +98,7 @@ def install_failtoban(**kwargs):
 
 
 install.add_command(install_prerequisites)
-install.add_command(install_mariadb)
+install.add_command(install_postgres)
 install.add_command(install_wkhtmltopdf)
 install.add_command(install_nodejs)
 install.add_command(install_psutil)

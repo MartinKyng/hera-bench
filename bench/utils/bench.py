@@ -580,8 +580,8 @@ def remove_backups_crontab(bench_path="."):
 	system_crontab.remove_all(command=job_command)
 
 
-def set_mariadb_host(host, bench_path="."):
-	update_common_site_config({"db_host": host}, bench_path=bench_path)
+def set_postgres_host(host, bench_path="."):
+	update_common_site_config({"db_host": host, "db_type": "postgres"}, bench_path=bench_path)
 
 
 def set_redis_cache_host(host, bench_path="."):

@@ -30,10 +30,10 @@ class TestBenchBase(unittest.TestCase):
 		for bench_name in self.benches:
 			bench_path = os.path.join(self.benches_path, bench_name)
 			bench = Bench(bench_path)
-			mariadb_password = (
+			postgres_password = (
 				"travis"
 				if os.environ.get("CI")
-				else getpass.getpass(prompt="Enter MariaDB root Password: ")
+				else getpass.getpass(prompt="Enter PostgreSQL superuser password: ")
 			)
 
 			if bench.exists:
@@ -45,8 +45,8 @@ class TestBenchBase(unittest.TestCase):
 							site,
 							"--force",
 							"--no-backup",
-							"--root-password",
-							mariadb_password,
+							"--db-root-password",
+							postgres_password,
 						],
 						cwd=bench_path,
 					)
@@ -94,7 +94,7 @@ class TestBenchBase(unittest.TestCase):
 		new_site_cmd = ["bench", "new-site", site_name, "--admin-password", "admin"]
 
 		if os.environ.get("CI"):
-			new_site_cmd.extend(["--mariadb-root-password", "travis"])
+			new_site_cmd.extend(["--db-type", "postgres", "--db-root-password", "travis"])
 
 		subprocess.call(new_site_cmd, cwd=os.path.join(self.benches_path, bench_name))
 

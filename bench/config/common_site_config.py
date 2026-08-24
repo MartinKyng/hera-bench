@@ -4,6 +4,7 @@ import json
 import os
 
 default_config = {
+	"db_type": "postgres",
 	"restart_supervisor_on_update": False,
 	"restart_systemd_on_update": False,
 	"serve_default_site": True,
