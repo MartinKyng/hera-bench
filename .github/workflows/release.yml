@@ -1,4 +1,4 @@
-name: Generate Semantic Release and publish on PyPI
+name: Release and publish Hera Bench to PyPI
 
 on:
   push:
@@ -6,31 +6,61 @@ on:
       - develop
   workflow_dispatch:
 
+# Avoid two release runs trying to publish the same version.
+concurrency:
+  group: pypi-release-develop
+  cancel-in-progress: false
+
 permissions:
   contents: write
+  id-token: write
+
 jobs:
   release:
-    name: Release
+    name: Semantic release and PyPI publish
     runs-on: ubuntu-latest
+    timeout-minutes: 30
+
     steps:
-      - uses: actions/checkout@v6
+      - name: Check out complete Git history
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
-      - uses: actions/setup-node@v6
-        with:
-          node-version: 24
-      - uses: actions/setup-python@v6
-        with:
-          python-version: '3.14'
+          persist-credentials: true
 
-      - name: Setup dependencies
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.14"
+
+      - name: Install release dependencies
         run: |
-          npm install @semantic-release/git @semantic-release/exec --no-save
-          python3 -m pip install wheel twine hatch==1.18.0
+          npm install --no-save \
+            semantic-release \
+            @semantic-release/commit-analyzer \
+            @semantic-release/release-notes-generator \
+            @semantic-release/exec \
+            @semantic-release/git \
+            @semantic-release/github
 
-      - name: Create Release
+          python -m pip install --upgrade pip
+          python -m pip install "hatch==1.18.0" twine
+
+      - name: Verify package can be built
+        run: hatch build -t sdist -t wheel
+
+      - name: Create GitHub release and publish to PyPI
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PYPI_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
-          PYPI_USERNAME: ${{ secrets.PYPI_USERNAME }}
+
+          # Create this repository secret with a PyPI API token.
+          # The token should begin with "pypi-".
+          PYPI_USERNAME: __token__
+          PYPI_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+
         run: npx semantic-release
