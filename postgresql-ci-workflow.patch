@@ -1,0 +1,62 @@
+diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+index 4f4681e..6e268bc 100644
+--- a/.github/workflows/ci.yml
++++ b/.github/workflows/ci.yml
+@@ -26,13 +26,13 @@ jobs:
+     name: Base (${{ matrix.python-version }})
+ 
+     services:
+-      mariadb:
+-        image: mariadb:10.6
++      postgres:
++        image: postgres:16
+         env:
+-          MARIADB_ROOT_PASSWORD: travis
++          POSTGRES_PASSWORD: travis
+         ports:
+-          - 3306:3306
+-        options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
++          - 5432:5432
++        options: --health-cmd="pg_isready -U postgres" --health-interval=5s --health-timeout=2s --health-retries=3
+ 
+     steps:
+       - uses: actions/checkout@v6
+@@ -64,13 +64,13 @@ jobs:
+     name: Production (${{ matrix.python-version }})
+ 
+     services:
+-      mariadb:
+-        image: mariadb:10.6
++      postgres:
++        image: postgres:16
+         env:
+-          MARIADB_ROOT_PASSWORD: travis
++          POSTGRES_PASSWORD: travis
+         ports:
+-          - 3306:3306
+-        options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
++          - 5432:5432
++        options: --health-cmd="pg_isready -U postgres" --health-interval=5s --health-timeout=2s --health-retries=3
+ 
+     steps:
+       - uses: actions/checkout@v6
+@@ -103,13 +103,13 @@ jobs:
+     name: Tests (${{ matrix.python-version }})
+ 
+     services:
+-      mariadb:
+-        image: mariadb:10.6
++      postgres:
++        image: postgres:16
+         env:
+-          MARIADB_ROOT_PASSWORD: travis
++          POSTGRES_PASSWORD: travis
+         ports:
+-          - 3306:3306
+-        options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
++          - 5432:5432
++        options: --health-cmd="pg_isready -U postgres" --health-interval=5s --health-timeout=2s --health-retries=3
+ 
+     steps:
+       - uses: actions/checkout@v6
+       
