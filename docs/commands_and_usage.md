@@ -42,9 +42,9 @@ You can also run the parts of the bench selectively.
 
 * Add apps
 
-	The get-app command gets remote hera apps from a remote git repository and installs them. Example: [erpnext](https://github.com/MartinKyng/erpnext)
+	The get-app command gets remote hera apps from a remote git repository and installs them. Example: [erpnext](https://github.com/RoyalGroupofCompanies/erpnext)
 
-		bench get-app erpnext https://github.com/MartinKyng/erpnext
+		bench get-app erpnext https://github.com/RoyalGroupofCompanies/erpnext
 
 * Install apps
 
@@ -69,6 +69,6 @@ You can also run the parts of the bench selectively.
 		bench setup manager
 
 1. Create new site bench-manager.local
-2. Gets the `bench_manager` app from https://github.com/MartinKyng/hera-bench_manager if it doesn't exist already
+2. Gets the `bench_manager` app from https://github.com/RoyalGroupofCompanies/hera-bench_manager if it doesn't exist already
 3. Installs the bench_manager app on the site bench-manager.local
 

@@ -456,7 +456,7 @@ def find_org(org_repo, using_cached: bool = False):
 
 	org_repo = org_repo[0]
 
-	for org in ["MartinKyng"]:
+	for org in ["RoyalGroupofCompanies"]:
 		res = requests.head(f"https://api.github.com/repos/{org}/{org_repo}")
 		if res.status_code in (400, 403):
 			res = requests.head(f"https://github.com/{org}/{org_repo}")
@@ -467,7 +467,7 @@ def find_org(org_repo, using_cached: bool = False):
 		return "", org_repo
 
 	raise InvalidRemoteException(
-		f"{org_repo} not found under the MartinKyng GitHub account"
+		f"{org_repo} not found under the RoyalGroupofCompanies GitHub account"
 	)
 
 

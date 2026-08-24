@@ -51,9 +51,9 @@ class AppMeta:
 	def __init__(self, name: str, branch: str | None = None, to_clone: bool = True):
 		"""
 		name (str): This could look something like
-				1. https://github.com/MartinKyng/healthcare.git
-				2. git@github.com:MartinKyng/healthcare.git
-				3. MartinKyng/healthcare@develop
+				1. https://github.com/RoyalGroupofCompanies/healthcare.git
+				2. git@github.com:RoyalGroupofCompanies/healthcare.git
+				3. RoyalGroupofCompanies/healthcare@develop
 				4. healthcare
 				5. healthcare@develop, healthcare@v13.12.1
 
@@ -62,7 +62,7 @@ class AppMeta:
 		 * https://docs.npmjs.com/about-semantic-versioning
 
 		class Healthcare(AppConfig):
-				dependencies = [{"MartinKyng/erpnext": "~13.17.0"}]
+				dependencies = [{"RoyalGroupofCompanies/erpnext": "~13.17.0"}]
 		"""
 		self.name = name.rstrip("/")
 		self.remote_server = "github.com"
@@ -547,7 +547,7 @@ def get_dep_version(dep: str, dep_path: Path) -> Optional[str]:
 def get_required_hera_version(app: App) -> Optional[str]:
 	pyproject = app.get_pyproject() or {}
 
-	# Reference: https://github.com/MartinKyng/hera-bench/issues/1524
+	# Reference: https://github.com/RoyalGroupofCompanies/hera-bench/issues/1524
 	req_hera = (
 		pyproject.get("tool", {})
 		.get("bench", {})
@@ -558,7 +558,7 @@ def get_required_hera_version(app: App) -> Optional[str]:
 	if not req_hera:
 		click.secho(
 			"Required hera version not set in pyproject.toml, "
-			"please refer: https://github.com/MartinKyng/hera-bench/issues/1524",
+			"please refer: https://github.com/RoyalGroupofCompanies/hera-bench/issues/1524",
 			fg="yellow",
 		)
 
