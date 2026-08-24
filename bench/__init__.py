@@ -1,4 +1,4 @@
-VERSION = "1.0.0"
+VERSION = "1.1.0"
 PROJECT_NAME = "hera-bench"
 HERA_VERSION = None
 current_path = None
